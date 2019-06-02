@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+<mapper namespace="com.dao.billDao.BillMapper">
+	
+	<resultMap   id       = "bill"               type="com.bean.Bill">
+		<id      property = "billid"         jdbcType="INTEGER" column = "billid" />
+		<result  property = "productid"      jdbcType="BINARY"  column = "productid"   />
+		<result  property = "username"       jdbcType="VARCHAR" column = "username"    />
+		<result  property = "quantity"       jdbcType="INTEGER" column = "quantity"    />
+		<result  property = "sumprice"       jdbcType="INTEGER" column = "sumprice"    />
+		<result  property = "status"         jdbcType="VARCHAR" column = "status"      />
+	</resultMap>
+	
+	<select      id           ="select"               
+				 parameterType="String"
+				 resultType   ="bill" >
+		select * from bill where username = #{username} order by ctime DESC;
+	</select>
+	
+	<select      id           ="selectid" 
+				 parameterType="Integer" 
+				 resultType   ="bill" >
+		select * from bill where billid   = #{billid} order by ctime DESC;
+	</select>
+	
+	
+	<insert      id="insert"            parameterType="bill">
+		insert into bill(   productid  ,   username  ,   quantity  ,   sumprice  ,   status  )
+		values          ( #{productid} , #{username} , #{quantity} , #{sumprice} , #{status} );
+	</insert>
+	
+	
+    <update      id			  ="updateprice"        
+    			 parameterType="bill">
+	    update bill set sumprice = #{sumprice} where billid = #{billid};
+    </update>
+    
+    
+    <update      id			  ="updatestatus"
+    			 parameterType="bill">
+	    update bill set status   = #{status}   where billid = #{billid};
+    </update>
+    
+    
+	<delete      id="deleteid"         parameterType="Integer">
+		delete from bill where billid = #{billid} ;
+	</delete>
+	
+	
+	<delete      id="deletename"        parameterType="String">
+		delete from bill where username = #{username} ;
+	</delete>
+	
+	
+	
+</mapper>
+
+
+

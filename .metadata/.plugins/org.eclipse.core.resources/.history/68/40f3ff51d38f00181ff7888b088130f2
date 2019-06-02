@@ -1,0 +1,191 @@
+
+package com.dao.indexDao;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.Reader;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.Properties;
+
+import org.apache.ibatis.session.SqlSession;
+import org.apache.ibatis.session.SqlSessionFactory;
+import org.apache.ibatis.session.SqlSessionFactoryBuilder;
+
+import com.bean.FirstBoxImg;
+import com.dao.Dao;
+
+public class IndexDao {
+	
+	static SqlSessionFactory sqlsessionfactory;
+	
+	public static void init() throws IOException {
+		InputStream ins   = Dao.class.getClassLoader().getResourceAsStream("com/dao/indexDao/mybatis-config.xml");
+		Reader      rdr   = new InputStreamReader(ins);
+		
+		InputStream is    = Dao.class.getClassLoader().getResourceAsStream("com/dao/indexDao/account.properties");
+		Properties  props = new Properties();
+					props.load(is);
+		
+		sqlsessionfactory = new SqlSessionFactoryBuilder().build(rdr,props);
+	}
+	
+	public static List<FirstBoxImg> index( Map<String,Object> map ) {
+		
+		SqlSession                  session         = null;
+		List<FirstBoxImg>           firstboximgList = new ArrayList<FirstBoxImg>();
+		System.out.println( " ----index---- " );
+		
+		try {
+	                                session         = sqlsessionfactory.openSession();
+	                                firstboximgList = session.selectList( "com.dao.indexDao.IndexMapper.index" , map );
+	                                
+	        Iterator                     boximgiter = firstboximgList.iterator();
+	                                
+	        while(boximgiter.hasNext()) {
+	        	FirstBoxImg firstboximg = (FirstBoxImg)boximgiter.next();
+	        	System.out.println( firstboximg.getProductid  ().length + " -- " +  
+	        			            firstboximg.getPrice      ()	    + " -- " + 
+	        			            firstboximg.getValue      () 		+ " -- " + 
+	        			            firstboximg.getProductname() 		+ " -- " + 
+	        			            firstboximg.getFirstboximg() );
+	        }
+	        System.out.println( "" );
+		}
+		finally                 { session.close   (); }
+		return   firstboximgList;
+	}
+	
+	
+	public static List<Integer> indexPages( Map<String,Object> map ) throws IOException {
+		
+		SqlSession    session   = null;
+		List<Integer> pageList  = null;
+		
+		try {
+			
+                      session          = sqlsessionfactory.openSession();
+                      pageList         = session.selectList( "com.dao.indexDao.IndexMapper.indexpages" , map );
+                      
+                      for( int i = pageList.size()-1 ; i > 0 ; i-- ) 
+	                      if( pageList.get(i).equals(0) )
+	                      	pageList.remove(i);
+                      
+                      
+	    	return    pageList;
+	    } 
+		finally     { session.close(); }
+	}
+	
+	
+	public static void test() throws IOException {
+		
+		init();
+		
+		Map<String,Object>  map             = new HashMap<String,Object>();
+		
+		List<String>        keylist         = new ArrayList<String>();
+		
+							keylist.add( "%汽车%" );
+							keylist.add( "%四驱%" );
+							
+		// not like function.					
+		List<String>        keynolist       = new ArrayList<String>();
+							keynolist.add("");
+							
+		List<Integer>       pageoffList     = new ArrayList<Integer>();
+							
+		
+		int                 productPerPage  = 16;
+		
+		for ( int page = 1 ; page <= 11 ; page++ ) {
+			  int			offset          = productPerPage * (page-1);
+			  pageoffList.add(offset);
+		}
+		
+		String              order           = new String("value");
+		String              sc              = new String("DESC" );
+		
+							map.put( "limit"     ,  16       );
+							map.put( "offset"    ,  0        );
+							
+							map.put( "order"     ,  order    );
+							
+							map.put( "sc"        ,  sc       );
+							
+							map.put( "keylist"   , keylist   );
+							map.put( "keynolist" , keynolist );
+							
+							map.put( "pageoffList" , pageoffList );
+							
+		//List<FirstBoxImg>   firstboximgList = index( map );
+		
+		List<Integer>       pageList     =   indexPages( map );
+		Iterator            pageiter     =        pageList.iterator();
+		while( pageiter.hasNext() ) 
+			System.out.println( "" + pageiter.next() );
+		
+	}
+	
+	public static void splitword() {
+		
+		String   keywordb  = new String("汽车     汽车城 全车垫        沙发    真皮    气垫     自动驾驶 福特 加长 超舒适 S500 四驱 加厚刹车");
+		String[] keywordbs = keywordb.split("");
+		
+		System.out.println( " Split into -- " + keywordbs.length );
+		
+		for( int i = 0 ; i < keywordbs.length ; i++ ) {
+			System.out.print( "--" + keywordbs[i] + "--");
+			if(keywordbs[i].equals(""))
+				System.out.print( " Empty word...");
+			System.out.println();
+		}
+		
+	}
+	
+	public static void pickhotwords() {
+		
+		String   keyword  = new String("汽车     汽车城 全车垫        沙发    真皮    气垫     自动驾驶 福特 加长 超舒适 S500 四驱 加厚刹车");
+		String[] keywords = keyword.split(" ");
+		
+		List<String> hotwords = new ArrayList<String>();
+		
+		hotwords.add("汽车");
+		hotwords.add("自动驾驶");
+		
+		for ( int i = 0 ; i < keywords.length ; i++ )
+			if(hotwords.contains(keywords[i]))
+				System.out.println( "contains keyword." + keywords[i] );
+		
+	}
+	
+	public static void main(String[] args) throws IOException {
+		
+		/*
+		String   keyword  = new String("汽车     汽车城 全车垫        沙发    真皮    气垫     自动驾驶 福特 加长 超舒适 S500 四驱 加厚刹车");
+		String[] keywords = keyword.split(" ");
+		
+		System.out.println( " Split into -- " + keywords.length );
+		
+		for( int i = 0 ; i < keywords.length ; i++ ) {
+			System.out.print( "--" + keywords[i] + "--");
+			if(keywords[i].equals(""))
+				System.out.print( " Empty word...");
+			System.out.println();
+		}
+		*/
+		
+		
+
+		
+		
+	}
+	
+	
+}
+
+

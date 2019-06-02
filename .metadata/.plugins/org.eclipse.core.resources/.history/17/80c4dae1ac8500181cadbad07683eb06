@@ -1,0 +1,156 @@
+package com.dao.indexDao;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.Reader;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Properties;
+import java.util.UUID;
+import java.util.regex.Pattern;
+
+import org.apache.ibatis.session.SqlSession;
+import org.apache.ibatis.session.SqlSessionFactory;
+import org.apache.ibatis.session.SqlSessionFactoryBuilder;
+
+import com.bean.FirstBoxImg;
+import com.dao.Dao;
+
+public class IndexDao {
+	
+	static SqlSessionFactory sqlsessionfactory;
+	
+	public static void init() throws IOException {
+		InputStream ins   = Dao.class.getClassLoader().getResourceAsStream("com/dao/indexDao/mybatis-config.xml");
+		Reader      rdr   = new InputStreamReader(ins);
+		
+		InputStream is    = Dao.class.getClassLoader().getResourceAsStream("com/dao/indexDao/account.properties");
+		Properties  props = new Properties();
+					props.load(is);
+		
+		sqlsessionfactory = new SqlSessionFactoryBuilder().build(rdr,props);
+	}
+	
+	public static List<FirstBoxImg> indexTest( String keyword ) throws IOException {
+		
+		SqlSession session  = null;
+		
+		try {
+	                              session          = sqlsessionfactory.openSession();
+	        IndexMI               indexmi          = session.getMapper(IndexMI.class);
+	        List<FirstBoxImg>     firstboximgList  = indexmi.indexTest(keyword);
+	        
+	        Iterator              boximgiter       = firstboximgList.iterator();
+	        
+	        while(boximgiter.hasNext()) {
+	        	
+	        	FirstBoxImg boximg = (FirstBoxImg)boximgiter.next();
+	        	
+	        	System.out.println( "" + boximg.getProductname() + " -- " + boximg.getProductname() );
+	        }
+	        
+	        System.out.println( "" );
+	        
+			return firstboximgList;
+		} finally {
+			session.close();
+		}
+	}
+	
+	
+	public static List<FirstBoxImg> index( String[] index ) throws IOException {
+		
+		SqlSession session  = null;
+		
+		try {
+	                              session          = sqlsessionfactory.openSession();
+	        IndexMI               indexmi          = session.getMapper(IndexMI.class);
+	        List<FirstBoxImg>     firstboximgList  = indexmi.index(index);
+	        
+	        Iterator              boximgiter       = firstboximgList.iterator();
+	        
+	        while(boximgiter.hasNext()) {
+	        	
+	        	FirstBoxImg boximg = (FirstBoxImg)boximgiter.next();
+	        	
+	        	System.out.println( "" + boximg.getProductname() + " -- " + boximg.getProductname() );
+	        }
+	        
+	        System.out.println( "" );
+	        
+			return firstboximgList;
+		} finally {
+			session.close();
+		}
+	}
+	
+	
+    public static void isStringNumber(String no){
+    	 
+        System.out.println(no.matches("(\\d+)"));
+    }
+    
+    static public final String WITH_DELIMITER = "((?<=%1$s)|(?=%1$s))";
+	public void someMethod() {
+		final String[] aEach = "a;b;c;d".split(String.format(WITH_DELIMITER, ";"));
+	}
+    
+	public static void main(String[] args) throws IOException {
+		
+		init();
+		
+		System.out.println( "子".length() );
+		
+		List<String> arr = new ArrayList();
+		
+		
+		IndexDao.isStringNumber("345");
+		IndexDao.isStringNumber("34we");
+		IndexDao.isStringNumber("345w12");
+		IndexDao.isStringNumber("956");
+		
+		
+		
+		
+		// How to split a string using regular expression?
+        String str = "I have a cat. I play cricket with bat. I dont like rat,"+
+                     "i hate mats, now break it";
+            Pattern ptn = Pattern.compile("(cat|rat|mat|bat)");
+            String[] parts = ptn.split(str);
+            for(String p:parts){
+                System.out.println(p);
+        }
+		
+        
+            
+            
+		/*
+		indexTest("%汽车%");
+		
+		System.out.println("\n\n");
+		
+		String[] keywords = new String[2];
+		
+	          	 keywords[0] = "%汽车%";
+	          	 keywords[1] = "%城%";
+	          	 
+		index(keywords);
+		*/
+
+		
+		
+		System.out.println(Arrays.toString("a;b;c;d".split("(?<=;)")));
+		System.out.println(Arrays.toString("a;b;c;d".split("(?=;)")));
+		System.out.println(Arrays.toString("a;b;c;d".split("((?<=;)|(?=;))")));
+		
+		String[] words = str.split("\\s+");
+		
+		
+		
+		
+	}
+	
+}

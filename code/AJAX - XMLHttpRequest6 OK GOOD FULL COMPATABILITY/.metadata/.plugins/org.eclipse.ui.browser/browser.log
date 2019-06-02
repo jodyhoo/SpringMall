@@ -1,0 +1,158 @@
+
+4月 24, 2018 09:56:59.49 NEW SESSION
+4月 24, 2018 09:56:59.49 [5184:1368:0424/095659.491:ERROR:connection_factory_impl.cc(381)] Failed to connect to MCS endpoint with error -21
+4月 24, 2018 10:40:42.20 Unable to read VR Path Registry from C:\Users\Administrator\AppData\Local\openvr\openvrpaths.vrpath
+4月 24, 2018 10:40:42.20 [Child 7300, Chrome_ChildThread] WARNING: pipe error: 109: file z:/build/build/src/ipc/chromium/src/chrome/common/ipc_channel_win.cc, line 346
+4月 24, 2018 10:40:42.20 [Child 7300, Chrome_ChildThread] WARNING: pipe error: 109: file z:/build/build/src/ipc/chromium/src/chrome/common/ipc_channel_win.cc, line 346
+4月 24, 2018 10:40:42.21 Unable to read VR Path Registry from C:\Users\Administrator\AppData\Local\openvr\openvrpaths.vrpath
+4月 24, 2018 10:40:42.21 [Parent 9784, Gecko_IOThread] WARNING: pipe error: 109: file z:/build/build/src/ipc/chromium/src/chrome/common/ipc_channel_win.cc, line 346
+4月 24, 2018 10:40:42.22 Unable to read VR Path Registry from C:\Users\Administrator\AppData\Local\openvr\openvrpaths.vrpath
+4月 24, 2018 10:40:42.22 [Child 7896, Chrome_ChildThread] WARNING: pipe error: 109: file z:/build/build/src/ipc/chromium/src/chrome/common/ipc_channel_win.cc, line 346
+4月 24, 2018 10:40:42.22 [Child 7896, Chrome_ChildThread] WARNING: pipe error: 109: file z:/build/build/src/ipc/chromium/src/chrome/common/ipc_channel_win.cc, line 346
+4月 24, 2018 10:40:42.30 Unable to read VR Path Registry from C:\Users\Administrator\AppData\Local\openvr\openvrpaths.vrpath
+4月 24, 2018 10:40:42.30 [Child 10012, Chrome_ChildThread] WARNING: pipe error: 109: file z:/build/build/src/ipc/chromium/src/chrome/common/ipc_channel_win.cc, line 346
+4月 24, 2018 10:40:42.30 
+4月 24, 2018 10:40:42.30 ###!!! [Child][MessageChannel] Error: (msgtype=0x510025,name=PNecko::Msg_RequestContextLoadBegin) Channel closing: too late to send/recv, messages will be lost
+4月 24, 2018 10:40:42.30 
+4月 24, 2018 10:40:42.30 
+4月 24, 2018 10:40:42.30 ###!!! [Parent][MessageChannel] Error: (msgtype=0x15008D,name=PBrowser::Msg_UpdateNativeWindowHandle) Closed channel: cannot send/recv
+4月 24, 2018 10:40:42.30 
+4月 24, 2018 10:40:42.30 
+4月 24, 2018 10:40:42.30 ###!!! [Parent][MessageChannel] Error: (msgtype=0x150080,name=PBrowser::Msg_Destroy) Closed channel: cannot send/recv
+4月 24, 2018 10:40:42.30 
+4月 24, 2018 10:40:42.30 
+4月 24, 2018 10:40:42.30 ###!!! [Child][MessageChannel] Error: (msgtype=0x150030,name=PBrowser::Msg_SetStatus) Channel closing: too late to send/recv, messages will be lost
+4月 24, 2018 10:40:42.30 
+4月 24, 2018 10:40:42.30 
+4月 24, 2018 10:40:42.30 ###!!! [Child][MessageChannel] Error: (msgtype=0x150001,name=PBrowser::Msg_AsyncMessage) Channel closing: too late to send/recv, messages will be lost
+4月 24, 2018 10:40:42.30 
+4月 24, 2018 10:40:42.30 
+4月 24, 2018 10:40:42.30 ###!!! [Child][MessageChannel] Error: (msgtype=0x150001,name=PBrowser::Msg_AsyncMessage) Channel closing: too late to send/recv, messages will be lost
+4月 24, 2018 10:40:42.30 
+4月 24, 2018 10:40:42.31 
+4月 24, 2018 10:40:42.31 ###!!! [Child][RunMessage] Error: Channel closing: too late to send/recv, messages will be lost
+4月 24, 2018 10:40:42.31 
+4月 24, 2018 10:40:42.31 
+4月 24, 2018 10:40:42.31 ###!!! [Child][MessageChannel] Error: (msgtype=0x150001,name=PBrowser::Msg_AsyncMessage) Closed channel: cannot send/recv
+4月 24, 2018 10:40:42.31 
+4月 24, 2018 10:43:34.58 Unable to read VR Path Registry from C:\Users\Administrator\AppData\Local\openvr\openvrpaths.vrpath
+4月 24, 2018 10:43:34.59 [Child 10232, Chrome_ChildThread] WARNING: pipe error: 109: file z:/build/build/src/ipc/chromium/src/chrome/common/ipc_channel_win.cc, line 346
+4月 24, 2018 10:43:34.59 Unable to read VR Path Registry from C:\Users\Administrator\AppData\Local\openvr\openvrpaths.vrpath
+4月 24, 2018 10:43:34.59 [Child 5372, Chrome_ChildThread] WARNING: pipe error: 109: file z:/build/build/src/ipc/chromium/src/chrome/common/ipc_channel_win.cc, line 346
+4月 24, 2018 10:43:34.59 [Child 5372, Chrome_ChildThread] WARNING: pipe error: 109: file z:/build/build/src/ipc/chromium/src/chrome/common/ipc_channel_win.cc, line 346
+4月 24, 2018 10:43:35.16 Unable to read VR Path Registry from C:\Users\Administrator\AppData\Local\openvr\openvrpaths.vrpath
+4月 24, 2018 10:43:35.16 [Child 8848, Chrome_ChildThread] WARNING: pipe error: 109: file z:/build/build/src/ipc/chromium/src/chrome/common/ipc_channel_win.cc, line 346
+4月 24, 2018 10:43:35.16 [Child 8848, Chrome_ChildThread] WARNING: pipe error: 109: file z:/build/build/src/ipc/chromium/src/chrome/common/ipc_channel_win.cc, line 346
+4月 24, 2018 10:43:35.17 Unable to read VR Path Registry from C:\Users\Administrator\AppData\Local\openvr\openvrpaths.vrpath
+4月 24, 2018 10:43:35.17 [Parent 9008, Gecko_IOThread] WARNING: pipe error: 109: file z:/build/build/src/ipc/chromium/src/chrome/common/ipc_channel_win.cc, line 346
+4月 24, 2018 10:43:35.17 
+4月 24, 2018 10:43:35.17 ###!!! [Parent][MessageChannel] Error: (msgtype=0x15008D,name=PBrowser::Msg_UpdateNativeWindowHandle) Closed channel: cannot send/recv
+4月 24, 2018 10:43:35.17 
+4月 24, 2018 10:43:35.17 
+4月 24, 2018 10:43:35.17 ###!!! [Parent][MessageChannel] Error: (msgtype=0x150080,name=PBrowser::Msg_Destroy) Closed channel: cannot send/recv
+4月 24, 2018 10:43:35.17 
+4月 24, 2018 10:43:35.93 Unable to read VR Path Registry from C:\Users\Administrator\AppData\Local\openvr\openvrpaths.vrpath
+4月 24, 2018 10:43:35.94 [GPU 708, Chrome_ChildThread] WARNING: pipe error: 109: file z:/build/build/src/ipc/chromium/src/chrome/common/ipc_channel_win.cc, line 346
+4月 24, 2018 10:43:52.86 Unable to read VR Path Registry from C:\Users\Administrator\AppData\Local\openvr\openvrpaths.vrpath
+4月 24, 2018 10:43:52.86 [Child 10200, Chrome_ChildThread] WARNING: pipe error: 109: file z:/build/build/src/ipc/chromium/src/chrome/common/ipc_channel_win.cc, line 346
+4月 24, 2018 10:43:52.86 [Child 10200, Chrome_ChildThread] WARNING: pipe error: 109: file z:/build/build/src/ipc/chromium/src/chrome/common/ipc_channel_win.cc, line 346
+4月 24, 2018 10:43:52.86 Unable to read VR Path Registry from C:\Users\Administrator\AppData\Local\openvr\openvrpaths.vrpath
+4月 24, 2018 10:43:52.87 [Parent 6856, Gecko_IOThread] WARNING: pipe error: 109: file z:/build/build/src/ipc/chromium/src/chrome/common/ipc_channel_win.cc, line 346
+4月 24, 2018 10:43:52.87 Unable to read VR Path Registry from C:\Users\Administrator\AppData\Local\openvr\openvrpaths.vrpath
+4月 24, 2018 10:43:52.87 [Child 9088, Chrome_ChildThread] WARNING: pipe error: 109: file z:/build/build/src/ipc/chromium/src/chrome/common/ipc_channel_win.cc, line 346
+4月 24, 2018 10:43:52.89 Unable to read VR Path Registry from C:\Users\Administrator\AppData\Local\openvr\openvrpaths.vrpath
+4月 24, 2018 10:43:52.90 [Child 9800, Chrome_ChildThread] WARNING: pipe error: 109: file z:/build/build/src/ipc/chromium/src/chrome/common/ipc_channel_win.cc, line 346
+4月 24, 2018 10:43:52.90 
+4月 24, 2018 10:43:52.90 ###!!! [Parent][MessageChannel] Error: (msgtype=0x15008D,name=PBrowser::Msg_UpdateNativeWindowHandle) Closed channel: cannot send/recv
+4月 24, 2018 10:43:52.90 
+4月 24, 2018 10:43:52.90 
+4月 24, 2018 10:43:52.90 ###!!! [Parent][MessageChannel] Error: (msgtype=0x150080,name=PBrowser::Msg_Destroy) Closed channel: cannot send/recv
+4月 24, 2018 10:43:52.90 
+4月 24, 2018 10:43:52.90 [Child 9800, Chrome_ChildThread] WARNING: pipe error: 109: file z:/build/build/src/ipc/chromium/src/chrome/common/ipc_channel_win.cc, line 346
+4月 24, 2018 10:43:53.29 Unable to read VR Path Registry from C:\Users\Administrator\AppData\Local\openvr\openvrpaths.vrpath
+4月 24, 2018 10:43:53.29 [GPU 5804, Chrome_ChildThread] WARNING: pipe error: 109: file z:/build/build/src/ipc/chromium/src/chrome/common/ipc_channel_win.cc, line 346
+4月 24, 2018 10:43:53.31 
+4月 24, 2018 10:43:53.31 ###!!! [Child][MessageChannel::SendAndWait] Error: Channel error: cannot send/recv
+4月 24, 2018 10:43:53.31 
+4月 24, 2018 11:12:51.45 Unable to read VR Path Registry from C:\Users\Administrator\AppData\Local\openvr\openvrpaths.vrpath
+4月 24, 2018 11:12:51.45 [Parent 5812, Gecko_IOThread] WARNING: pipe error: 109: file z:/build/build/src/ipc/chromium/src/chrome/common/ipc_channel_win.cc, line 346
+4月 24, 2018 11:12:51.45 [Parent 5812, Gecko_IOThread] WARNING: pipe error: 109: file z:/build/build/src/ipc/chromium/src/chrome/common/ipc_channel_win.cc, line 346
+4月 24, 2018 11:12:51.45 Unable to read VR Path Registry from C:\Users\Administrator\AppData\Local\openvr\openvrpaths.vrpath
+4月 24, 2018 11:12:51.45 [Child 9904, Chrome_ChildThread] WARNING: pipe error: 109: file z:/build/build/src/ipc/chromium/src/chrome/common/ipc_channel_win.cc, line 346
+4月 24, 2018 11:12:51.45 Unable to read VR Path Registry from C:\Users\Administrator\AppData\Local\openvr\openvrpaths.vrpath
+4月 24, 2018 11:12:51.45 [Child 1316, Chrome_ChildThread] WARNING: pipe error: 109: file z:/build/build/src/ipc/chromium/src/chrome/common/ipc_channel_win.cc, line 346
+4月 24, 2018 11:12:51.46 [Child 1316, Chrome_ChildThread] WARNING: pipe error: 109: file z:/build/build/src/ipc/chromium/src/chrome/common/ipc_channel_win.cc, line 346
+4月 24, 2018 11:12:51.46 [Parent 5812, Gecko_IOThread] WARNING: pipe error: 109: file z:/build/build/src/ipc/chromium/src/chrome/common/ipc_channel_win.cc, line 346
+4月 24, 2018 11:12:51.49 
+4月 24, 2018 11:12:51.49 ###!!! [Parent][MessageChannel] Error: (msgtype=0x15008D,name=PBrowser::Msg_UpdateNativeWindowHandle) Closed channel: cannot send/recv
+4月 24, 2018 11:12:51.49 
+4月 24, 2018 11:12:51.49 
+4月 24, 2018 11:12:51.49 ###!!! [Parent][MessageChannel] Error: (msgtype=0x150080,name=PBrowser::Msg_Destroy) Closed channel: cannot send/recv
+4月 24, 2018 11:12:51.49 
+4月 24, 2018 11:12:51.49 Unable to read VR Path Registry from C:\Users\Administrator\AppData\Local\openvr\openvrpaths.vrpath
+4月 24, 2018 11:12:51.49 [Child 9876, Chrome_ChildThread] WARNING: pipe error: 109: file z:/build/build/src/ipc/chromium/src/chrome/common/ipc_channel_win.cc, line 346
+4月 24, 2018 11:12:52.01 
+4月 24, 2018 11:12:52.01 ###!!! [Child][MessageChannel::SendAndWait] Error: Channel error: cannot send/recv
+4月 24, 2018 11:12:52.01 
+4月 24, 2018 11:14:57.48 Unable to read VR Path Registry from C:\Users\Administrator\AppData\Local\openvr\openvrpaths.vrpath
+4月 24, 2018 11:14:57.48 [Parent 7708, Gecko_IOThread] WARNING: pipe error: 109: file z:/build/build/src/ipc/chromium/src/chrome/common/ipc_channel_win.cc, line 346
+4月 24, 2018 11:14:57.48 Unable to read VR Path Registry from C:\Users\Administrator\AppData\Local\openvr\openvrpaths.vrpath
+4月 24, 2018 11:14:57.48 [Child 9788, Chrome_ChildThread] WARNING: pipe error: 109: file z:/build/build/src/ipc/chromium/src/chrome/common/ipc_channel_win.cc, line 346
+4月 24, 2018 11:14:57.48 [Parent 7708, Gecko_IOThread] WARNING: pipe error: 109: file z:/build/build/src/ipc/chromium/src/chrome/common/ipc_channel_win.cc, line 346
+4月 24, 2018 11:14:57.48 
+4月 24, 2018 11:14:57.48 ###!!! [Parent][MessageChannel] Error: (msgtype=0x15008D,name=PBrowser::Msg_UpdateNativeWindowHandle) Closed channel: cannot send/recv
+4月 24, 2018 11:14:57.48 
+4月 24, 2018 11:14:57.49 
+4月 24, 2018 11:14:57.49 ###!!! [Parent][MessageChannel] Error: (msgtype=0x150080,name=PBrowser::Msg_Destroy) Closed channel: cannot send/recv
+4月 24, 2018 11:14:57.49 
+4月 24, 2018 11:14:57.69 [Parent 7708, Gecko_IOThread] WARNING: pipe error: 109: file z:/build/build/src/ipc/chromium/src/chrome/common/ipc_channel_win.cc, line 346
+4月 24, 2018 11:14:57.70 Unable to read VR Path Registry from C:\Users\Administrator\AppData\Local\openvr\openvrpaths.vrpath
+4月 24, 2018 11:14:57.70 [Child 5136, Chrome_ChildThread] WARNING: pipe error: 109: file z:/build/build/src/ipc/chromium/src/chrome/common/ipc_channel_win.cc, line 346
+4月 24, 2018 11:14:57.70 [Child 5136, Chrome_ChildThread] WARNING: pipe error: 109: file z:/build/build/src/ipc/chromium/src/chrome/common/ipc_channel_win.cc, line 346
+4月 24, 2018 11:14:58.24 
+4月 24, 2018 11:14:58.25 ###!!! [Child][MessageChannel::SendAndWait] Error: Channel error: cannot send/recv
+4月 24, 2018 11:14:58.25 
+4月 24, 2018 12:16:31.48 [8384:7472:0424/121631.486:ERROR:connection_factory_impl.cc(381)] Failed to connect to MCS endpoint with error -118
+4月 24, 2018 12:38:56.19 [8672:7288:0424/123856.190:ERROR:connection_factory_impl.cc(381)] Failed to connect to MCS endpoint with error -7
+4月 24, 2018 12:39:46.12 [8672:7288:0424/123946.127:ERROR:connection_factory_impl.cc(381)] Failed to connect to MCS endpoint with error -118
+4月 24, 2018 12:40:26.02 [8672:7288:0424/124026.022:ERROR:process_metrics.cc(105)] NOT IMPLEMENTED
+4月 24, 2018 12:40:26.02 [8672:7288:0424/124026.022:ERROR:process_metrics.cc(105)] NOT IMPLEMENTED
+4月 24, 2018 12:40:26.02 [8672:7288:0424/124026.022:ERROR:process_metrics.cc(105)] NOT IMPLEMENTED
+4月 24, 2018 12:40:26.02 [8672:7288:0424/124026.022:ERROR:process_metrics.cc(105)] NOT IMPLEMENTED
+4月 24, 2018 12:41:03.49 [8672:7288:0424/124103.494:ERROR:connection_factory_impl.cc(381)] Failed to connect to MCS endpoint with error -118
+4月 24, 2018 12:42:26.02 [8672:7288:0424/124226.028:ERROR:process_metrics.cc(105)] NOT IMPLEMENTED
+4月 24, 2018 12:42:26.02 [8672:7288:0424/124226.028:ERROR:process_metrics.cc(105)] NOT IMPLEMENTED
+4月 24, 2018 12:42:26.03 [8672:7288:0424/124226.028:ERROR:process_metrics.cc(105)] NOT IMPLEMENTED
+4月 24, 2018 12:42:26.03 [8672:7288:0424/124226.028:ERROR:process_metrics.cc(105)] NOT IMPLEMENTED
+4月 24, 2018 12:43:21.74 [8672:7288:0424/124321.740:ERROR:connection_factory_impl.cc(381)] Failed to connect to MCS endpoint with error -7
+4月 24, 2018 12:45:50.89 [9816:7628:0424/124550.894:ERROR:connection_factory_impl.cc(381)] Failed to connect to MCS endpoint with error -118
+4月 24, 2018 12:52:58.95 [9680:8516:0424/125258.952:ERROR:process_metrics.cc(105)] NOT IMPLEMENTED
+4月 24, 2018 12:52:58.95 [9680:8516:0424/125258.952:ERROR:process_metrics.cc(105)] NOT IMPLEMENTED
+4月 24, 2018 12:52:58.95 [9680:8516:0424/125258.952:ERROR:process_metrics.cc(105)] NOT IMPLEMENTED
+4月 24, 2018 12:52:58.95 [9680:8516:0424/125258.953:ERROR:process_metrics.cc(105)] NOT IMPLEMENTED
+4月 24, 2018 12:52:58.95 [9680:8516:0424/125258.953:ERROR:process_metrics.cc(105)] NOT IMPLEMENTED
+4月 24, 2018 12:52:58.95 [9680:8516:0424/125258.953:ERROR:process_metrics.cc(105)] NOT IMPLEMENTED
+4月 24, 2018 13:09:36.05 [6924:7412:0424/130936.056:ERROR:connection_factory_impl.cc(381)] Failed to connect to MCS endpoint with error -118
+4月 24, 2018 13:10:19.74 [6924:7412:0424/131019.740:ERROR:connection_factory_impl.cc(381)] Failed to connect to MCS endpoint with error -118
+4月 24, 2018 13:11:15.08 [6924:7412:0424/131115.081:ERROR:process_metrics.cc(105)] NOT IMPLEMENTED
+4月 24, 2018 13:11:15.08 [6924:7412:0424/131115.081:ERROR:process_metrics.cc(105)] NOT IMPLEMENTED
+4月 24, 2018 13:11:15.08 [6924:7412:0424/131115.081:ERROR:process_metrics.cc(105)] NOT IMPLEMENTED
+4月 24, 2018 13:11:15.08 [6924:7412:0424/131115.081:ERROR:process_metrics.cc(105)] NOT IMPLEMENTED
+4月 24, 2018 13:11:23.96 [6924:9340:0424/131123.965:ERROR:gcm_channel_status_request.cc(127)] GCM channel request failed.
+4月 24, 2018 13:11:34.26 [6924:7412:0424/131134.260:ERROR:connection_factory_impl.cc(381)] Failed to connect to MCS endpoint with error -7
+4月 24, 2018 13:13:15.08 [6924:7412:0424/131315.087:ERROR:process_metrics.cc(105)] NOT IMPLEMENTED
+4月 24, 2018 13:13:15.08 [6924:7412:0424/131315.087:ERROR:process_metrics.cc(105)] NOT IMPLEMENTED
+4月 24, 2018 13:13:15.08 [6924:7412:0424/131315.087:ERROR:process_metrics.cc(105)] NOT IMPLEMENTED
+4月 24, 2018 13:13:15.08 [6924:7412:0424/131315.087:ERROR:process_metrics.cc(105)] NOT IMPLEMENTED
+4月 24, 2018 13:13:28.99 [6924:7412:0424/131328.991:ERROR:connection_factory_impl.cc(381)] Failed to connect to MCS endpoint with error -118
+4月 24, 2018 13:13:56.79 [6924:9340:0424/131356.798:ERROR:gcm_channel_status_request.cc(127)] GCM channel request failed.
+4月 24, 2018 13:15:15.09 [6924:7412:0424/131515.092:ERROR:process_metrics.cc(105)] NOT IMPLEMENTED
+4月 24, 2018 13:15:15.09 [6924:7412:0424/131515.092:ERROR:process_metrics.cc(105)] NOT IMPLEMENTED
+4月 24, 2018 13:15:15.09 [6924:7412:0424/131515.092:ERROR:process_metrics.cc(105)] NOT IMPLEMENTED
+4月 24, 2018 13:15:15.09 [6924:7412:0424/131515.092:ERROR:process_metrics.cc(105)] NOT IMPLEMENTED
+4月 24, 2018 13:17:01.62 [6924:9340:0424/131701.625:ERROR:gcm_channel_status_request.cc(127)] GCM channel request failed.
+4月 24, 2018 13:17:03.10 [6924:7412:0424/131703.100:ERROR:connection_factory_impl.cc(381)] Failed to connect to MCS endpoint with error -7
+4月 24, 2018 13:17:15.09 [6924:7412:0424/131715.097:ERROR:process_metrics.cc(105)] NOT IMPLEMENTED
+4月 24, 2018 13:17:15.09 [6924:7412:0424/131715.097:ERROR:process_metrics.cc(105)] NOT IMPLEMENTED
+4月 24, 2018 13:17:15.09 [6924:7412:0424/131715.097:ERROR:process_metrics.cc(105)] NOT IMPLEMENTED
+4月 24, 2018 13:17:15.09 [6924:7412:0424/131715.097:ERROR:process_metrics.cc(105)] NOT IMPLEMENTED

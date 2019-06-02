@@ -1,0 +1,720 @@
+<%@ page language    ="java" 
+         contentType ="text/html; charset=UTF-8"
+         pageEncoding="UTF-8"
+         import      ="java.util.*"
+         isELIgnored ="false"%>
+<%@ taglib uri   ="http://www.springframework.org/tags/form"
+           prefix="form" %>
+           
+<%  request.setCharacterEncoding("utf-8"); 
+    String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+request.getContextPath(); 
+    
+    String productPageURL = (String)session.getAttribute("productPageURL"); 
+    if((productPageURL=="null")||(productPageURL==null)) { productPageURL=""; } %>
+
+<html>
+	
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+		<title>添加新产品</title>
+	    <script src="<%=basePath%>/js/jQuery/jquery-3.2.1.js"></script>
+	    <script src="<%=basePath%>/js/jQuery/jqueryform.js"></script>
+	    <script src="<%=basePath%>/js/userCenter/productCenter/addProduct.js"></script>
+	    <link rel="stylesheet" type="text/css" href="<%=basePath%>/css/userCenter/productCenter/addProduct.css"/>
+		
+		<script>
+		
+			$(document).ready(function() {
+				
+				$('#cleancontent').click( function() {
+					$('#productPage').html('');
+				});
+				$('#setleft').click( function() {
+					$('#productPage').css('text-align',"left");
+				});
+				$('#setcenter').click( function() {
+					$('#productPage').css('text-align',"center");
+				});
+				$('#setright').click( function() {
+					$('#productPage').css('text-align',"right");
+				});
+				
+				
+				$('#pageImgJile').change( function() {
+					
+					var productPage = document.getElementById('productPage');
+					var files       = document.getElementById('pageImgJile').files;
+					
+					for( var i = 0 ; i < files.length ; i++ ) {
+	
+						if( files[i].type.substring(0,5)=="image" ) {
+					
+							var file       = files[i];
+	
+								filereader = new FileReader();
+								filereader.readAsDataURL(file);
+								
+								filereader.onload = function(filedata) {
+									
+									var srcData = filedata.target.result;
+									var img     = new Image();
+										img.src = srcData;
+										
+										productPage.appendChild(img);
+								}
+						}
+					}
+				});
+				
+				$('#pageImgJile').blur( function() {
+					var formdata     = new FormData();
+						formdata.append( 'tempProductPage' , document.getElementById('productPage').innerHTML );	
+					
+					$.ajax( {
+						
+						url         : 'pageUploader',
+						data        :  formdata     , 
+						type        : 'POST'        ,
+						
+						processData :  false        ,
+						contentType :  false        
+					});
+				});
+				
+				$('#productPage').blur( function() {
+					var formdata     = new FormData();
+					formdata.append( 'tempProductPage' , document.getElementById('productPage').innerHTML );	
+					
+					$.ajax( {
+						
+						url         : 'pageUploader'    ,
+						data        :  formdata     , 
+						type        : 'POST'        ,
+						
+						processData :  false        ,
+						contentType :  false        
+					});
+				});				
+				
+				/*
+				// when enter text, save content.
+				document.getElementById('productPage').addEventListener( "input" , function() {
+					var formdata     = new FormData();
+						formdata.append( 'tempProductPage' , document.getElementById('productPage').innerHTML );	
+				
+					$.ajax( {
+						
+						url         : 'uploader'    ,
+						data        :  formdata     , 
+						type        : 'POST'        ,
+						
+						processData :  false        ,
+						contentType :  false        
+					});
+				} , false);
+				*/
+				
+			});
+		</script>
+		
+		<style>
+			* { font-family: 微软雅黑; }
+			.productPage { height:500px; width:1100px; 
+						   margin-left: auto;
+						   margin-right: auto;
+						   padding:10px;
+						   overflow-x:hidden;
+						   overflow-y:auto  ;
+						 }
+			.middle		 {
+						   display: table-cell;
+						   vertical-align: middle;
+						 }
+			.outerdiv    { height:550px; width:1100px;
+			               border: 1px solid #fafafa; 
+			               text-align: center;
+			               border-radius: 5px;
+			               margin: 0 auto;
+					       display: table;
+			              }
+
+			#midcontent {
+				
+				/* 1.initial edge&space */
+				border-width  : 0px;
+				padding       : 0px;
+				border-spacing: 0px;
+
+				/* 2.background color */
+				border-radius: 5px;
+
+				/* 3.position in block */
+				margin-top   : 20px;
+				display : block;
+			    position: relative;
+		        margin  : 0 auto;
+		        margin-bottom: 20px;
+				width  : 1200px;
+				height : 2300px;
+
+				/* 4.detail decoration. */
+				color: #000000;
+				box-shadow: 0px 0px 6px #e6e6e6;
+
+				/* 5.text decoration. */
+				padding       :  5px;
+				border-spacing: 15px;
+
+			}
+		</style>
+		
+
+		<style>
+				.titlecore  {
+								display     : block;
+							    position    : relative;
+							    margin      : 0 auto;
+						        margin-top  :  30px;
+						        margin-bottom : 60px;
+						        height      :  60px;
+						        width       : 859px;
+						        border      : 0px solid #fafafa;
+							}
+		</style>
+
+		<style>
+				.boximgpage { 
+				        height  : 765px;
+				        width   : 1150px; 
+					  }
+				.boximgcore {
+						display     : block;
+					    position    : relative;
+					    margin      : 0 auto;
+				        margin-top  : 30px;
+				        height      : 734px;
+				        width       : 859px;
+				        border      : 1px solid #fafafa;
+				      }
+				.boximgroom {
+						  position : relative;
+						  margin   : 0 auto;
+						  float    : left;
+						  margin-left: 2px;
+						  margin-right: 2px;
+						  margin-top  : 20px;
+						  margin-bottom : 2px; 
+						  height   : 350px;
+						  width    : 280px;
+						  border   : 1px solid #fafafa;
+							}	  
+				.boximg {
+						  position : relative;
+						  margin   : 0 auto;
+						  float    : left;
+						  height   : 280px;
+						  width    : 280px;
+						  border   : 1px solid #fafafa;
+						}
+		</style>
+
+
+		<style>
+				.editbar      {
+							  position   : relative;
+							  float      : left;
+							  margin-left: 150px;
+							  margin-top : 10px;
+							  height     : 30px;
+						  	  width      : 900px;						  
+							 }
+				.contentpage { 
+						        height  : 600px;
+						        width   : 1150px; 
+							  }
+		</style>
+
+
+		<!-- text infor style -->
+		<style>
+
+			* { font-family: 微软雅黑; }
+			.formname {
+						height :  20px; 
+						width  :  80px; 
+						font-size : 18px;
+			          }
+			.gap      {
+						height :  10px; 
+					  }
+			.page { 
+					display : block;
+				    position: relative;
+			        margin  : 0 auto;
+			        margin-top : 30px;
+			        margin-bottom: 30px;
+			        border  :   0px solid #e6e6e6;
+			        border-radius: 5px;
+			        box-shadow: 0px 0px 10px #e6e6e6;
+				  }
+			.textpage {
+				        height  : 700px;
+				        width   : 600px; 
+					  }
+			.core {
+					display     : block;
+				    position    : relative;
+				    float       : left;
+			        margin-left : 100px;
+			        margin-top  : 30px;
+			        height      : 300px;
+			        width       : 400px;
+			        border      : 0px solid #e6e6e6;
+			      }
+			.home {
+					display     : block;
+				    position    : relative;
+				    margin      : 0 auto;
+				    text-align  : center;
+				    font-size   : 16px;
+				    color       : #000;
+				    text-decoration: none;
+				  }
+			.title {
+					display : block;
+				    position: relative;
+			        margin  : 0 auto;
+			        text-align: center;
+			        font-size: 20px;
+			        font-weight: 800px;
+			        height      : 30px;
+			        width       : 400px;
+				    }
+			.titlethin   {
+			        font-weight: 800;
+					}	  
+			.titlethick  {
+			        font-weight: 300;
+					}
+			.mainbox {
+			        height      : 300px;
+			        width       : 400px;
+					 }
+			.message {
+				        height      : 80px;
+				        width       : 200px;
+					 }
+			.textbox {
+				        height      : 30px;
+				        width       : 400px;
+				        font-size   : 18px;
+				        border-radius: 5px;
+				        border       : 1px solid #e6e6e6;
+					 }
+			.pswdbox {
+				        height      : 30px;
+				        width       : 400px;
+				        font-size   : 18px;
+				        border-radius: 5px;
+				        border       : 1px solid #e6e6e6;
+					 }		 
+			.submitbox {
+				        height      : 30px;
+				        width       : 400px;
+					   }
+			.userboxselect {
+				        height      : 30px;
+				        width       : 400px;
+				        border-radius: 5px;
+				        border       : 1px solid #e6e6e6;
+				        box-shadow   : 0px 0px 12px #66e0ff;
+					 }
+			.pswdboxout {
+				        height      : 30px;
+				        width       : 400px;
+				        border-radius: 5px;
+				        border       : 1px solid #e6e6e6;
+					    }
+			.pswdboxuse {
+				        height      : 30px;
+				        width       : 400px;
+				        font-size   : 18px;
+
+				        border-bottom-right-radius: 0px;
+				        border-bottom-left-radius: 0px;
+
+				        border-top-right-radius: 5px;
+				        border-top-left-radius: 5px;
+
+				        border-top    : 1px solid #e6e6e6;
+				        border-left   : 1px solid #e6e6e6;
+				        border-right  : 1px solid #e6e6e6;
+				        border-bottom : 0px solid #e6e6e6;
+					   }  
+			.showpswd  {  
+				        height      : 18px;
+				        width       : 400px;
+
+				        border-top-right-radius: 0px;
+				        border-top-left-radius: 0px;
+
+				        border-bottom-right-radius: 5px;
+				        border-bottom-left-radius: 5px;
+
+				        border-top    : 0px;
+				        border-left   : 1px solid #e6e6e6;
+				        border-right  : 1px solid #e6e6e6;
+				        border-bottom : 1px solid #e6e6e6;
+					   }  
+			.pageinfor {
+						display     : block;
+					    position    : relative;
+					    float       : left;
+					    margin-top  : 300px;
+					    margin-left : 50px;		
+					    text-align  : center;
+				        font-size   : 12px;
+				        	
+				        height      : 30px;
+				        width       : 500px;
+				        border      : 0px solid #e6e6e6;
+					   }
+			.bottominfor {
+							font-size: 12px;
+						 }
+			.textboxover{ 
+				animation-name     : textboxover;
+				animation-duration : 0.3s;
+				box-shadow: 0px 0px  5px #00aaff;
+			}
+			.textboxout { 
+				animation-name     : textboxout;
+				animation-duration : 0.3s;
+				box-shadow: 0px 0px  0px #00aaff;
+			}
+			.textboxblur {    
+				animation-name     : textboxblur;
+				animation-duration : 0.3s;
+				box-shadow: 0px 0px 0px #00aaff;
+			}
+			.textboxfocus{ 
+				animation-name     : textboxover;
+				animation-duration : 0.3s;
+				box-shadow: 0px 0px 10px #00aaff;
+			}
+			@keyframes textboxover {
+				from   { box-shadow: 0px 0px  0px #00aaff; }
+				to     { box-shadow: 0px 0px  5px #00aaff; }
+			}
+			@keyframes textboxout {
+				from   { box-shadow: 0px 0px  5px #00aaff; }
+				to     { box-shadow: 0px 0px  0px #00aaff; }
+			}
+			@keyframes textboxblur {
+				from   { box-shadow: 0px 0px 10px #00aaff; }
+				to     { box-shadow: 0px 0px  0px #00aaff; }
+			}
+			@keyframes textboxfocus {
+				from   { box-shadow: 0px 0px  5px #00aaff; }
+				to     { box-shadow: 0px 0px 10px #00aaff; }
+			}
+		</style>
+
+	</head>
+	
+	<body>
+		
+		<% String username = (String)session.getAttribute("username"); 
+		   if((username=="null")||(username==null)) { 
+			   username=""; 
+		   } %>
+
+		
+		<div  id="midcontent">
+
+			<div class="titlecore">
+
+				<div ><a class="home" href="<%=basePath%>">返回主页</a></div>
+				
+				<div class="title titlethick"><span>你好  <%=username%>&nbsp;</span></div>
+				<div class="title titlethin" >欢迎添加新产品</div>
+
+			</div>
+
+			<div class="page boximgpage">
+
+				<div class="boximgcore">
+				
+					<div class="coretitle">插入细节图</div>
+					
+					<% for ( int i = 0 ; i < 6 ; i++ ) { %>
+						
+						<div class="boximgroom" >
+							<div class="boximg" >
+								<div  id="imgbox<%=i%>">
+									<!-- init img setting... -->
+									<img src="<%=basePath%>/boxImgPath<%=i%>/<%=java.util.Calendar.getInstance().getTimeInMillis()%>"/>
+								</div>
+							</div>
+							<form id="form<%=i%>" 
+							      method="post" 
+							  	  action="/Spring/boxImgUpload<%=i%>" 
+							  	  enctype="multipart/form-data">
+								<!-- File input --> 
+								<input class="tdwid" name="file" onchange="uploadImgBox<%=i%>()" type="file" />
+							</form>
+							<span>图片<%=i%></span>
+						</div>
+
+						<% if ( (i+1)%3==0 ) { %>
+						<div class="gap"></div>
+						<% } %>
+						
+					<% } %>	
+					
+				</div>
+
+			</div>
+
+			<div class="page contentpage">
+			
+				<div class="editbar">
+					点击添加图片
+					<input type="file" name="pageImgJile" id="pageImgJile"  multiple="true"/>
+					<a href="<%=basePath%>/pageViewer.htm"><button id="userpage">浏览页面</button></a>
+					<button id="cleancontent">清除页面</button>
+					<button id="setleft"     >向左对齐</button>
+					<button id="setcenter"     >居中</button>
+					<button id="setright"    >向右对齐</button>
+					<button id="appendrtext" >添加文字</button>
+				</div>
+
+				<div class="outerdiv">
+					<div class="middle">
+						<div id="productPage" class="productPage" contenteditable="true"><%=productPageURL%></div>
+					</div>	
+				</div>
+
+			</div>
+
+		<div class="page textpage">
+			
+
+			<div class="core">
+
+
+				<table class="mainbox" border = "0">
+				<form:form action="/Spring/userCenter/addProduct"
+				           method="POST"
+				           commandName="product">
+					           
+					    <tr>
+					    <td   class="message">
+					    <form:errors    style="color:#c11;" path="*" />
+					    <div            style="color:#c11;"   >${message}</div>
+					    <div            style="color:#008000;">${success}</div>
+					    </td></tr>
+
+					    <tr>
+					    <td class="formname">&nbsp;<img height="16" src="<%=basePath%>/img/tinyicon/userCenter/productCenter/name.png">&nbsp;产品名称  : </td>
+
+					    </tr>
+
+					    <tr>
+					    <td>
+						    <form:label  path ="productname" />
+						    <form:input  type ="text" class="textbox" name="username" id="username" value="${productname}" path ="productname" />
+					    </td>
+					    </tr>
+
+					    <tr>
+					    <td class="tvalid">${nameValidator}</td>
+					    </tr>
+
+					    <tr><td class="gap"></td><tr>
+
+					    <tr>
+					    	<td class="formname">&nbsp;<img height="16" src="<%=basePath%>/img/tinyicon/userCenter/productCenter/price.png">&nbsp;产品价格 ( 格式   00.00  或  00 ) </td>
+					    </tr>
+
+					    <tr>
+						    <td>
+							    <form:label  path ="price" />
+							    <form:input  path ="price" type="text" class="textbox" name="price" id="price"/>
+							</td>
+						</tr>
+
+					    <tr>
+						    <td class="tvalid">${priceValidator}</td>
+						</tr>
+
+					    <tr><td class="gap"></td><tr>
+
+					    <tr>
+					   		<td class="formname">&nbsp;<img height="16" src="<%=basePath%>/img/tinyicon/userCenter/productCenter/quantity.png">&nbsp;产品数量   </td>
+					    </tr>
+
+					    <tr>
+					    	<td>
+							    <form:label  path ="quantity" />
+							    <form:input  path ="quantity" type="text" class="textbox" name="quantity" id="quantity" />
+							</td>    
+					    </tr>
+
+					    <tr>
+						    <td class="tvalid">${quantityValidator}</td>
+						</tr>
+
+					    <tr><td class="gap"></td><tr>
+
+					    <tr>
+					    	<td class="formname">&nbsp;<img height="16" src="<%=basePath%>/img/tinyicon/userCenter/productCenter/category.png">&nbsp;选择品类    </td>
+					    </tr>
+
+					    <tr>
+					    	<td>
+							    <form:label  path="category" />
+								<form:select     class="textbox" path ="category">
+								   <form:option  value="" label="--------"/>
+								   <form:options items="${categoryList}" />
+								</form:select>
+							</td>
+					    </tr>
+
+					    <tr>
+						    <td class="tvalid">${categoryValidator}</td>
+						</tr>
+
+					    <tr><td class="gap"></td><tr>
+
+					    <tr>
+					    	<td align="left" colspan="2">
+					    	<input type="submit" class="submitbox" id="submit" name="submit" value="提交" />
+					   		</td>
+					    </tr>
+					</form:form>
+
+				</table>
+
+			</div>
+
+			<div class="pageinfor"><a  class="bottominfor" href="">法律声明</a>&nbsp;<br /> yourstore copyright 2018 coporation</div>
+			
+		</div>
+
+		<script>
+
+			var textbox  = document.getElementsByClassName('textbox');
+
+			var boxover   = function(event) {
+				console.log( 'over!' );
+				if( (event.target.className == 'textbox textboxout')||
+					(event.target.className == 'textbox') )
+				     event.target.className =  'textbox textboxover';
+			}
+			var boxout    = function(event) {
+				console.log( 'over!' );
+				if(event.target.className == 'textbox textboxover')
+				   event.target.className =  'textbox textboxout';
+			}
+			var boxfocus  = function(event) {
+				console.log( 'focus!' );
+				event.target.className = 'textbox textboxfocus';
+			}
+			var boxblur   = function(event) {
+				console.log( 'blur!' );
+				event.target.className = 'textbox textboxout';
+			}
+
+			for( var i = 0 ; i < textbox.length ; i++ ) {
+				textbox[i].addEventListener( 'mouseover' , boxover  , false );
+				textbox[i].addEventListener( 'mouseout'  , boxout   , false );
+				textbox[i].addEventListener( 'focus' 	 , boxfocus , false );
+				textbox[i].addEventListener( 'blur'      , boxblur  , false );
+			}
+
+
+
+			var showpswd   = document.getElementById('showpswd' );
+				showpswd.style.display='none';
+
+			var pswdcheck  = document.getElementById('pswdcheck');
+
+			var password   = document.getElementById('password' );
+
+			var changepswd = function(event) {
+				showpswd.innerHTML = password.value;
+			}
+
+			var inpaswd    = function(event) {
+
+					  changepswd();
+
+				if  ( pswdcheck.checked   == false     ) showpswd.style.display ='none';
+				else                                     showpswd.style.display ='block';
+
+				if ( ( password.className == 'pswdbox'              )||
+					 ( password.className == 'pswdbox textboxout'   )||
+					 ( password.className == 'pswdbox textboxfocus' ) )
+				       password.className  = 'pswdboxuse';
+				else   password.className  = 'pswdbox'   ;
+			}
+
+
+
+			var pswdover   = function(event) {
+			 	     console.log( 'over -- ' );
+				if( (password.className == 'pswdboxuse') || 
+					(password.className == 'pswdboxuse textboxout' ) )
+			    	 password.className =  'pswdboxuse textboxover';
+				else 
+				if( (password.className == 'pswdbox textboxout')||
+					(password.className == 'pswdbox'   ) )
+				     password.className =  'pswdbox textboxover';
+			}
+			var pswdout    = function(event) {
+				     console.log( 'out!' );
+				if( (password.className == 'pswdbox textboxover') || 
+					(password.className == 'pswdbox'   ) )
+				     password.className =  'pswdbox textboxout';
+				else
+				if  (password.className == 'pswdboxuse textboxover')
+				     password.className =  'pswdboxuse textboxout';				 
+			}
+
+
+			var pswdfocus  = function(event) {
+				console.log( 'focus!' );
+				if( (password.className == 'pswdboxuse textboxover') )
+					 password.className =  'pswdboxuse textboxfocus';
+				else 
+				if( (password.className == 'pswdbox textboxover') )
+					 password.className =  'pswdbox textboxfocus';
+			}
+			var pswdblur   = function(event) {
+				console.log( 'blur -- ' );
+				if( (password.className == 'pswdboxuse textboxfocus') )
+					 password.className =  'pswdboxuse textboxout';
+				else 
+				if( (password.className == 'pswdbox textboxfocus') )
+					 password.className =  'pswdbox textboxout';
+			}	
+
+				password.addEventListener( 'mouseover' , pswdover   , false );
+				password.addEventListener( 'mouseout'  , pswdout    , false );
+				password.addEventListener( 'focus' 	   , pswdfocus  , false );
+				password.addEventListener( 'blur'      , pswdblur   , false );
+
+				pswdcheck.addEventListener( 'change'   ,   inpaswd  , false );
+				password.addEventListener ( 'keyup'  , changepswd , false );
+
+		</script>
+
+
+		</div>
+
+	</body>
+	
+</html>
+
+

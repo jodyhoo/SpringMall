@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.dao.productDetailDao.ProductDetailMapper">
+	
+	<resultMap   id       = "productDetail"       type="com.bean.ProductDetail">
+		<id      property = "productid"       jdbcType="BINARY"  column = "productid"    />
+		<result  property = "name"            jdbcType="VARCHAR" column = "name"         />
+		<result  property = "code"            jdbcType="VARCHAR" column = "code"         />
+		<result  property = "boximg"          jdbcType="VARCHAR" column = "boximg"       />
+		<result  property = "boximgsmall"     jdbcType="VARCHAR" column = "boximgsmall"  />
+	</resultMap>
+	
+	<resultMap   id       = "productDetailUpdate" type="com.bean.ProductDetail">
+		<id      property = "productid"       jdbcType="BINARY"  column = "productid" />
+		<result  property = "newname"         jdbcType="VARCHAR" column = "name"      />
+		<result  property = "oldname"         jdbcType="VARCHAR" column = "name"      />
+	</resultMap>
+	
+	<select      id="selectid"              resultType="productDetail" >
+		select * from productdetail where productid = #{productid} ;
+	</select>
+	
+	<select      id="selectdetail"          resultType="productDetail" >
+		select * from productdetail where productid = #{productid} ;
+	</select>
+	
+	<insert      id="insertdetail"       parameterType="productDetail" >
+		INSERT INTO productDetail(   productid  ,   name  ,   code  ,   boximg  ,   boximgsmall  )
+		VALUES              	 ( #{productid} , #{name} , #{code} , #{boximg} , #{boximgsmall} );
+	</insert>
+    
+	<delete      id="deletename"        parameterType="productDetail" >
+		DELETE FROM productdetail WHERE name = #{name} and productid = #{productid};
+	</delete>
+	
+	<delete      id="deleteid"           parameterType="byte">
+		DELETE FROM productdetail WHERE productid = #{productid};
+	</delete>
+	
+	<update      id="updatename"        parameterType="com.bean.ProductDetail" >
+		UPDATE productdetail SET name = #{newname} WHERE productid = #{productid} and name = #{oldname};
+	</update>
+	
+	
+</mapper>
+

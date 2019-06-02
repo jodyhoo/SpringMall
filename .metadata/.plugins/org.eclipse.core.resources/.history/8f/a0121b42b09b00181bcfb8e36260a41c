@@ -1,0 +1,133 @@
+package com.cartCenter;
+
+import java.io.IOException;
+import java.util.List;
+import java.util.UUID;
+
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+
+import org.springframework.http.HttpRequest;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
+import org.springframework.web.servlet.ModelAndView;
+
+import com.bean.Cart;
+import com.dao.cartDao.CartDao;
+import com.dao.uuid.UuidUtils;
+
+@Controller
+public class CartCenter {
+	
+	@RequestMapping(value={"/cartCenter"},method=RequestMethod.GET)
+	public ModelAndView cartPage( ModelAndView mav ) throws IOException {
+		       mav.setViewName("/cartCenter/cartPage");
+		return mav;
+	}
+	
+	
+    
+	
+	@RequestMapping(value={"/addcart"},method=RequestMethod.POST)
+	public void addcart( HttpServletRequest request ,
+						 HttpSession        session ,
+			             ModelAndView       mav     ) throws IOException {
+		
+		
+		
+		Cookie[] cookies = request.getCookies();
+		
+		if (cookies != null) {
+		    for (Cookie cookie : cookies) {
+		    	if (cookie.getName().equals("cookieName")) {
+		    		System.out.println( "cookieName -- " + cookie.getName());
+		    	}
+		    	else {
+		    		System.out.println( "cookie -- " + cookie.getName());		    		
+		    	}
+		    }
+		}
+		
+		
+		String     productid = request.getParameter("productid");
+		
+		System.out.println( "------------------------ addcart           ------------------------ " );
+		System.out.println( "productid -- " + productid + "\n" );
+		
+		// 1.get basic infor
+		System.out.println( "1.get basic infor" );
+		byte[]      uuidbyt   =  UuidUtils.asBytes(  UUID.fromString(productid)  );
+		String      username  = (String)session.getAttribute("username");
+		
+		if(username.equals(null)) {
+			System.out.println( "username is null. " );
+			username = "";
+		}
+		
+		System.out.println( "username -- " + username );
+		
+		// 2.get record of cart.
+		System.out.println( "2.get record of cart." );
+		Cart         cart      =  new  Cart();
+				     cart.setProductid(uuidbyt);
+				     cart.setUsername(username);
+				     
+				    			CartDao.init();
+		
+		List<Cart>   cartlist  = CartDao.selectid(cart);
+		
+		System.out.println( "" + cartlist.size() );
+		
+		// 3.
+		if( cartlist.size() == 0     ) {
+		      System.out.println( "3.1.product size -- 0" ); 
+					 cart.setQuantity(   "1"  ); 
+			 CartDao.insertcart( cart ); 
+		} 
+		else { 
+			System.out.println( "3.2.product size -- 1" ); 
+			Cart    carta       = cartlist.get(0); 
+			
+			Integer quantityint = new Integer( carta.getQuantity() ); 
+			
+			if(quantityint<9999){ 
+				System.out.println( "cart quantity in the range of 9999." ); 
+				String     quantity    = Integer.toString(  quantityint+1 ); 
+					       cart.setQuantity(quantity); 
+			} else 
+				System.out.println( "cart quantity out of range of 9999." ); 
+			
+			CartDao.updatecartc(cart); 
+		} 
+		
+		System.out.println( "adding to cart..." ); 
+		
+	}
+	
+	
+	@RequestMapping(value={"/updateprice"},method=RequestMethod.GET)
+	public void updateprice( ModelAndView mav ) throws IOException {
+		;
+	}
+	
+	@RequestMapping(value={"/submitcart"} ,method=RequestMethod.GET)
+	public void submitcart( ModelAndView mav ) throws IOException {
+		;
+	}
+	
+	@RequestMapping(value={"/deletecart"} ,method=RequestMethod.GET)
+	public void deletecart( ModelAndView mav ) throws IOException {
+		;
+	}
+	
+	
+	
+}
+
+
+
+
+

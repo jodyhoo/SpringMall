@@ -1,0 +1,71 @@
+package com.dao.indexDao;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.Reader;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Properties;
+import java.util.UUID;
+
+import org.apache.ibatis.session.SqlSession;
+import org.apache.ibatis.session.SqlSessionFactory;
+import org.apache.ibatis.session.SqlSessionFactoryBuilder;
+
+import com.bean.FirstBoxImg;
+import com.dao.Dao;
+
+public class IndexDao {
+	
+	static SqlSessionFactory sqlsessionfactory;
+	
+	public static void init() throws IOException {
+		InputStream ins   = Dao.class.getClassLoader().getResourceAsStream("com/dao/indexDao/mybatis-config.xml");
+		Reader      rdr   = new InputStreamReader(ins);
+		
+		InputStream is    = Dao.class.getClassLoader().getResourceAsStream("com/dao/indexDao/account.properties");
+		Properties  props = new Properties();
+					props.load(is);
+		
+		sqlsessionfactory = new SqlSessionFactoryBuilder().build(rdr,props);
+	}
+	
+	public static List<FirstBoxImg> indexTest( String keyword ) throws IOException {
+		
+		SqlSession session  = null;
+		
+		try {
+	                              session          = sqlsessionfactory.openSession();
+	        IndexMI               indexmi          = session.getMapper(IndexMI.class);
+	        List<FirstBoxImg>     firstboximgList  = indexmi.indexTest(keyword);
+	        
+	        Iterator              boximgiter       = firstboximgList.iterator();
+	        
+	        while(boximgiter.hasNext()) {
+	        	
+	        	FirstBoxImg boximg = (FirstBoxImg)boximgiter.next();
+	        	
+	        	System.out.println( "" + boximg.getProductname() + " -- " + boximg.getProductname() );
+	        }
+	        
+	        System.out.println( "" );
+	        
+			return firstboximgList;
+		} finally {
+			session.close();
+		}
+		
+	}
+	
+	
+	public static void main(String[] args) throws IOException {
+		
+		init();
+		
+		indexTest("%Æû³µ%");
+		
+		
+	}
+	
+}

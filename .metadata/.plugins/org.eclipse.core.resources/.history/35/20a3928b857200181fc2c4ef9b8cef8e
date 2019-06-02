@@ -1,0 +1,101 @@
+
+
+
+function storeimg() {
+	
+	
+	
+}
+
+
+function uploadImgPage(){
+	//1.set content of selector result as empty.
+    //$('#imgpage').html('');
+    $("#formpage").ajaxForm({
+        success:function(data) { 
+              $(data).appendTo('#imgpage');
+    		});
+
+    },
+     dataType:"text"
+   }).submit();
+}
+
+
+function uploadImgBox0(){
+	//1.set content of selector result as empty.
+    $('#imgbox0').html('');
+    $("#form0").ajaxForm({
+        success:function(data) { 
+              $('#imgbox0').html(data);
+    },
+     dataType:"text"
+   }).submit();
+}
+
+function uploadImgBox1(){
+	//1.set content of selector result as empty.
+    $('#imgbox1').html('');
+    $("#form1").ajaxForm({
+        success:function(data) { 
+              $('#imgbox1').html(data);
+    },
+     dataType:"text"
+   }).submit();
+}
+
+function uploadImgBox2(){
+	//1.set content of selector result as empty.
+    $('#imgbox2').html('');
+    $("#form2").ajaxForm({
+        success:function(data) { 
+              $('#imgbox2').html(data);
+    },
+     dataType:"text"
+   }).submit();
+}
+
+
+function uploadImgBox3(){
+	//1.set content of selector result as empty.
+    $('#imgbox3').html('');
+    $("#form3").ajaxForm({
+        success:function(data) { 
+              $('#imgbox3').html(data);
+    },
+     dataType:"text"
+   }).submit();
+}
+
+function uploadImgBox4(){
+	//1.set content of selector result as empty.
+    $('#imgbox4').html('');
+    $("#form4").ajaxForm({
+        success:function(data) { 
+              $('#imgbox4').html(data);
+    },
+     dataType:"text"
+   }).submit();
+}
+
+function uploadImgBox5(){
+	//1.set content of selector result as empty.
+    $('#imgbox5').html('');
+    $("#form5").ajaxForm({
+        success:function(data) { 
+              $('#imgbox5').html(data);
+    },
+     dataType:"text"
+   }).submit();
+}
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,8 @@
+INDEX VERSION 1.3+E:\INTERNET BUSSINESS\AJAX\7.AJAX - XMLHttpRequest\AJAX - XMLHttpRequest6\.metadata\.plugins\org.eclipse.wst.jsdt.core\indexes
+1343788097.index
+3390256829.index
+2589231559.index
+1235394471.index
+3461150155.index
+3926969567.index
+204267916.index

@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<session version="1.0">
+<refactoring comment="Rename resource &apos;uploadpage/src/main/webapp/WEB-INF/jsp/showimg_sidebar.jsp&apos; to &apos;showimg.jsp&apos;" description="Rename resource &apos;showimg_sidebar.jsp&apos;" flags="7" id="org.eclipse.ltk.core.refactoring.rename.resource" input="src/main/webapp/WEB-INF/jsp/showimg_sidebar.jsp" name="showimg.jsp" stamp="1531022122186" updateReferences="true"/>
+</session>

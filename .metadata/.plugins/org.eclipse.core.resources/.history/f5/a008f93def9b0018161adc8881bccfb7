@@ -1,0 +1,283 @@
+<%@ page language    ="java" 
+         contentType ="text/html; charset=UTF-8"
+         pageEncoding="UTF-8"
+         import      ="java.util.*"
+         isELIgnored ="false"%>
+<%@ taglib uri   ="http://www.springframework.org/tags/form"
+           prefix="form" %>
+           
+<%  request.setCharacterEncoding("utf-8"); 
+    String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+request.getContextPath(); 
+    
+    String productPageURL = (String)session.getAttribute("productPageURL"); 
+    if((productPageURL=="null")||(productPageURL==null)) { productPageURL=""; } %>
+
+<html>
+	
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+		<title>Insert title here</title>
+	    <script src="<%=basePath%>/js/jQuery/jquery-3.2.1.js"></script>
+	    <script src="<%=basePath%>/js/jQuery/jqueryform.js"></script>
+	    <script src="<%=basePath%>/js/userCenter/productCenter/addProduct.js"></script>
+	    <link rel="stylesheet" type="text/css" href="<%=basePath%>/css/userCenter/productCenter/addProduct.css"/>
+		
+		<script>
+
+			$(document).ready(function() {
+				
+				$('#cleancontent').click( function() {
+					$('#productPage').html('');
+				});
+				$('#setleft').click( function() {
+					$('#productPage').css('text-align',"left");
+				});
+				$('#setcenter').click( function() {
+					$('#productPage').css('text-align',"center");
+				});
+				$('#setright').click( function() {
+					$('#productPage').css('text-align',"right");
+				});
+				
+				
+				$('#pageImgJile').change( function() {
+					
+					var productPage = document.getElementById('productPage');
+					var files       = document.getElementById('pageImgJile').files;
+					
+					for( var i = 0 ; i < files.length ; i++ ) {
+	
+						if( files[i].type.substring(0,5)=="image" ) {
+					
+							var file       = files[i];
+	
+								filereader = new FileReader();
+								filereader.readAsDataURL(file);
+								
+								filereader.onload = function(filedata) {
+									
+									var srcData = filedata.target.result;
+									var img     = new Image();
+										img.src = srcData;
+										
+										productPage.appendChild(img);
+								}
+						}
+					}
+				});
+				
+				$('#pageImgJile').blur( function() {
+					var formdata     = new FormData();
+					formdata.append( 'tempProductPage' , document.getElementById('productPage').innerHTML );	
+					
+					$.ajax( {
+						
+						url         : 'pageUploader',
+						data        :  formdata     , 
+						type        : 'POST'        ,
+						
+						processData :  false        ,
+						contentType :  false        
+					});
+				});
+				
+				$('#productPage').blur( function() {
+					var formdata     = new FormData();
+					formdata.append( 'tempProductPage' , document.getElementById('productPage').innerHTML );	
+					
+					$.ajax( {
+						
+						url         : 'pageUploader'    ,
+						data        :  formdata     , 
+						type        : 'POST'        ,
+						
+						processData :  false        ,
+						contentType :  false        
+					});
+				});				
+				
+				/*
+				// when enter text, save content.
+				document.getElementById('productPage').addEventListener( "input" , function() {
+					var formdata     = new FormData();
+						formdata.append( 'tempProductPage' , document.getElementById('productPage').innerHTML );	
+				
+					$.ajax( {
+						
+						url         : 'uploader'    ,
+						data        :  formdata     , 
+						type        : 'POST'        ,
+						
+						processData :  false        ,
+						contentType :  false        
+					});
+				} , false);
+				*/
+				
+			});
+		</script>
+		
+		<style>
+			* { font-family: 微软雅黑; }
+			.productPage { height:500px; width:1000px; 
+						   margin-left: auto;
+						   margin-right: auto;
+						   padding:10px;
+						   overflow-x:hidden;
+						   overflow-y:auto  ;
+						 }
+			.middle		 {
+						   display: table-cell;
+						   vertical-align: middle;
+						 }
+			.outerdiv    { height:550px; width:1100px;
+			               border: 1px solid #969696; 
+			               text-align: center;
+			               margin: 0 auto;
+					       display: table;
+			              }
+		</style>
+		
+	</head>
+	
+	<body>
+		
+		<% String username = (String)session.getAttribute("username"); 
+		   if((username=="null")||(username==null)) { 
+			   username=""; 
+		   } %>
+		
+		
+		<div class="center toptext">
+			<span>你好  <%=username%>&nbsp;</span>
+		</div>
+		
+		<div  class="center">
+			<span>添加产品&nbsp;</span>
+				<a href="<%=basePath%>">返回主页</a>
+		</div>
+		
+		<div class="center" id="midcontent">
+			
+			<div class="outerdiv">
+				<table border="1" >
+					<% for ( int i = 0 ; i < 6 ; i++ ) { %>
+						<% if ( i%3==0 ) { %>
+						<tr>
+						<% } %>
+							<td class="tdwid">
+								<div  id="imgbox<%=i%>">
+									<!-- init img setting... -->
+									<img src="<%=basePath%>/boxImgPath<%=i%>/<%=java.util.Calendar.getInstance().getTimeInMillis()%>"/>
+								</div>
+								<form id="form<%=i%>" 
+								      method="post" 
+								  	  action="/Spring/boxImgUpload<%=i%>" 
+								  	  enctype="multipart/form-data">
+									<!-- File input -->    
+									<input class="tdwid" name="file" id="file" onchange="uploadImgBox<%=i%>()" type="file" />
+								</form>
+								<h4 class="center">图片<%=i%></h4>
+							</td>
+						
+						<% if ((i==2)||(i==5)) { %>
+						<tr>
+						<% } %>
+					<% } %>
+				</table>
+			</div>
+			
+			<div class="center">
+				<input type="file" name="pageImgJile" id="pageImgJile"  multiple="true"/>
+				<a href="<%=basePath%>/pageViewer.htm"><button id="userpage">浏览页面</button></a>
+				<button id="cleancontent">清除页面</button>
+				<button id="setleft"     >向左对齐</button>
+				<button id="setcenter"     >居中</button>
+				<button id="setright"    >向右对齐</button>
+				<button id="appendrtext" >添加文字</button>
+			</div>
+			
+			<div class="outerdiv">
+				<div class="middle">
+					<div id="productPage" class="productPage" contenteditable="true"><%=productPageURL%></div>
+				</div>	
+			</div>
+			
+			<h3 class="center">添加产品信息 : </h3>
+			<table border="1" class="center">
+				<form:form action="/Spring/userCenter/addProduct"
+				           method="POST"
+				           commandName="product">
+
+				    <tr><td id="tlen"></td>
+				    <td colspan="2" style="width:300px;"> 
+				    <form:errors    style="color:#c11;" path="*" />
+				    <span           style="color:#c11;"   >${message}</span>
+				    <span           style="color:#008000;">${success}</span>
+				    </td></tr>
+				    
+				    <tr>
+				    <td class="tlen">产品名称  : </td>
+				    <td>
+				    <form:label  path ="productname" />
+				    <form:input  type ="productname"
+				                 class="blen"
+				                 value="${productname}"
+				                 path ="productname" />
+				    </td>
+				    <td class="tvalid">${nameValidator}</td>
+				    </tr>
+				    
+				    <tr>
+				    <td class="tlen">产品价格 ( 格式   00.00  或  00 ) </td>
+				    <td>
+				    <form:label  path ="price" />
+				    <form:input  class="blen"
+				                 path ="price" />
+				    </td>
+				    <td class="tvalid">${priceValidator}</td>
+				    </tr>
+				    
+				    <tr>
+				    <td class="tlen">产品数量   </td>
+				    <td>
+				    <form:label  path ="quantity" />
+				    <form:input  class="blen"
+				                 path ="quantity" />
+				    </td>
+				    <td class="tvalid">${quantityValidator}</td>
+				    </tr>
+				    
+				    
+				    <tr>
+				    <td class="tlen">选择品类    </td>
+				    <td>
+				    <form:label  path="category" />
+					<form:select class="blen" path ="category">
+					   <form:option  value="" label="--------"/>
+					   <form:options items="${categoryList}" />
+					</form:select>
+					
+				    </td>
+				    <td class="tvalid">${categoryValidator}</td>
+				    </tr>
+				    
+				    
+				    <tr>
+				    <td></td>
+				    <td align="right">
+				    <input type="submit" value="提交" />
+				    </td>
+				    </tr>
+					
+					
+				</form:form>
+			</table>
+			
+		</div>
+		
+	</body>
+	
+</html>
+
+

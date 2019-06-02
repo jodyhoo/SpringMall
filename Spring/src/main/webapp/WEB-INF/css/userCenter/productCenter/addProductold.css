@@ -1,0 +1,90 @@
+
+
+/* top bar part */
+
+  .toptext { font-size : 20px; 
+             font-weight: 600;
+           }
+  .center  { text-align:center;
+	  		  margin-left: auto ;
+			   margin-right: auto ;
+             }
+
+
+
+
+/* table part.  */
+.tlen    {    width      : 300px; 
+			  font-size  : 18px;   }
+/* input length */
+.blen    {    width      : 300px;  }	
+  
+.tvalid  {    width      : 300px; 
+			  color      : #c11;
+			  font-size  : 18px;   }
+
+#uploadbox {
+	/* 1.initial edge&space */
+	border-width  : 0px;
+	padding       : 0px;
+	border-spacing: 0px;
+
+	/* 2.background color */
+	background-color: #B11;
+	border-radius: 5px;
+
+	/* 3.position in block */
+	/*margin-top   : 6px;*/
+	width  : 200px;
+	height : 200px;
+	margin-left: auto ;
+  	margin-right: auto ; 
+
+	/* 4.detail decoration. */
+	color: #000000;
+	box-shadow: 0px 0px 6px;
+
+	/* 5.text decoration. */
+	padding       :  5px;
+	border-spacing: 15px;
+
+	background-image : url( "img/200_200.jpg" );
+}
+
+.div  { 	
+	margin-top   : 7px;
+	margin-left : auto ;
+  	margin-right: auto ; 
+}
+
+.imgbutton {
+	text-align: center;
+	margin-top   : 5px;
+	margin-left : 50px ;
+	margin-right: 10px ; 
+}
+
+.tdwid { 
+	width:280px; 
+	margin-left : auto ;
+  	margin-right: auto ;
+}
+
+
+.outersize{ height: 600px; width:1000px; overflow:auto; border:10px solid #000;}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

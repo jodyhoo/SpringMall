@@ -1,0 +1,304 @@
+package com.indexCenter;
+
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.net.URL;
+import java.net.URLDecoder;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Iterator;
+import java.util.List;
+import java.util.UUID;
+
+import javax.imageio.ImageIO;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.servlet.ModelAndView;
+
+import com.bean.BoxImg;
+import com.bean.FirstBoxImg;
+import com.bean.Product;
+import com.buffer.imgbuffer.BoxImgBuffer;
+import com.buffer.imgbuffer.BoxImgBuffer.LONGEREDGE;
+import com.dao.imgDao.BoxImgDao;
+import com.dao.indexDao.IndexDao;
+import com.dao.productDao.ProductDao;
+import com.dao.uuid.UuidUtils;
+import com.userCenter.productCenter.ProductPage;
+
+@Controller
+public class IndexCenter {
+	
+	@RequestMapping(value={"/indexPage"},method=RequestMethod.GET)
+	public ModelAndView indexPage( HttpServletRequest request ,
+			                       ModelAndView       mav     ,
+			                       HttpSession        session ) throws IOException {
+		
+		
+		/************** get infor part. **************/
+		
+		// 0.get   basePath
+		String     basePath = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+request.getContextPath();  
+		
+		// 1.get   keyword
+		String     keyword = URLDecoder.decode( request.getParameter( "keyword" ) ,"utf-8");
+		
+		// 2.get   page 
+		Integer    page     = Integer.valueOf( request.getParameter( "page"    ) );
+		
+		
+				           session.removeAttribute( "keyword" );
+				           session.setAttribute   ( "keyword"  , keyword );
+				           
+				           session.removeAttribute( "page"    );
+				           session.setAttribute   ( "page"     , page    );
+				           
+				           
+		System.out.println( "--------IndexPage--------" );
+		System.out.println( "keyword -- " + keyword     );
+		System.out.println( "page    -- " + page        );
+		
+		
+		
+		// 1.create main list.
+		List<FirstBoxImg> firstBoxImgList = new ArrayList();
+		
+		IndexDao.init();
+		
+		// use white space.
+		if(keyword.split(" ").length>1) {
+			
+			// 2.temporary list.
+			//List<FirstBoxImg> firstBoxImgnewList = new ArrayList();
+			
+			System.out.println( "Entering multi-keyword parser ... " );
+			
+			List<String> keywordList = new ArrayList<String>();
+			
+			String[]     keywords    = keyword.split(" ");
+			
+			for( int i = 0 ; i < keywords.length ; i++ )
+				   keywordList.add(keywords[i]);
+			
+			while( keywordList.size()<30 )
+				   keywordList.add("");
+			
+			System.out.println( "Entering keyword parser ... " );
+			
+			List<String> resultList = IndexDao.indexMulti30(keywordList);
+					
+			/*
+			for ( int i = 0 ; i < keywords.length ; i++ ) {
+				
+				System.out.println( "keyword "+i+" ---" + keywords[i] + "---" );
+				
+				// additional empty space.
+				if( !keywords[i].equals("") ) {
+					
+					// 2.add regex to single keyword and index.
+					String            queryword       = String  .valueOf("%").concat(keywords[i].concat("%"));
+					
+					List<FirstBoxImg> subFBoxImgList  = IndexDao.indexWord( queryword , page );
+					
+					if( i==0 )        firstBoxImgList = subFBoxImgList;
+					
+					
+					
+					//Iterator          boximgiter     = subFBoxImgList.iterator();
+					
+					//while(boximgiter.hasNext()) {
+						
+					//	FirstBoxImg firstboximg = (FirstBoxImg)boximgiter.next();
+						
+					//	if(firstBoxImgList.contains(firstboximg))
+					//		firstBoxImgnewList.add(firstboximg);
+						
+					//}
+					
+					//firstBoxImgList = firstBoxImgnewList;
+					
+				}
+				
+			}
+			*/
+			
+		} else {
+			
+			System.out.println( "Entering single-keyword parser ... " );
+			
+			// 1.add   regex.
+			String            queryword      = String  .valueOf("%").concat(keyword.concat("%"));
+			// 2.query result.
+			List<FirstBoxImg> subFBoxImgList = IndexDao.indexWord( queryword , page );
+			
+			firstBoxImgList = subFBoxImgList;
+			
+		}
+		
+		
+		// 1.product information part...	
+		List<String>     indexPageproductidList           =  new ArrayList();
+		
+		List<String>     indexPageFirstboximgList         =  new ArrayList();
+		List<String>     indexPageImgLongerEdgeList       =  new ArrayList();
+		
+		List<String>     indexPageProductnameList         =  new ArrayList();
+		List<String>     indexPageProductpriceList        =  new ArrayList();
+		
+		List<Integer>    indexPagesList                   =  new ArrayList();
+		
+		
+		Iterator         firstboximgList                  =  firstBoxImgList.iterator();
+		
+		UUID             productiduuid                    =  null;
+		
+		while(firstboximgList.hasNext()) {
+			
+			FirstBoxImg           firstBoxImg    =  (FirstBoxImg)firstboximgList.next          ();
+			String                firstboximg    =               firstBoxImg    .getFirstboximg();
+			
+			System.out.println(  "firstboximg  " +   firstboximg );
+			
+			
+			String                rootPath       =   new String("c:/tomcat/webapps/Spring/WEB-INF");
+			
+			
+			// 2.2.restore boximg part.
+			if(  (firstboximg!=null)&&(new File(rootPath+firstboximg).exists())  ) {
+				
+				System.out.println( "firstboximg has been recorded to List. " );
+				indexPageFirstboximgList.add(firstboximg);
+				
+				// 1.identify longer edge.
+				if( ProductPage.getLongEdge(basePath, firstboximg).equals(LONGEREDGE.HEIGHT) )
+					indexPageImgLongerEdgeList.add("HEIGHT");
+				else 
+					indexPageImgLongerEdgeList.add("WIDTH" );
+				
+			} else {
+				
+				System.out.println( "firstboximg file not exists... " );
+				// set default img Path.
+				indexPageFirstboximgList  .add("/img/default/userCenter/productCenter/280_280.jpg");
+				
+				indexPageImgLongerEdgeList.add("HEIGHT" );
+				
+			}
+			
+			
+			System.out.println( "converting productid..." );
+			
+		                  productiduuid  =  UuidUtils.asUuid(firstBoxImg.getProductid() );
+		    
+		    indexPageproductidList       .add(  productiduuid.toString    () );
+		    System.out.println( "           productid -- " + productiduuid.toString  () );
+		    
+		    
+		    indexPageProductnameList     .add(  firstBoxImg.getProductname() );
+		    indexPageProductpriceList    .add(  firstBoxImg.getPrice      () );
+		    
+		}
+	    
+		
+			session.setAttribute( "indexPageproductidList"           , indexPageproductidList         ); 
+		
+		    session.setAttribute( "indexPageFirstboximgList"         , indexPageFirstboximgList       );
+		    session.setAttribute( "indexPageImgLongerEdgeList"       , indexPageImgLongerEdgeList     ); 
+		    
+            session.setAttribute( "indexPageProductnameList"         , indexPageProductnameList       ); 		
+            session.setAttribute( "indexPageProductpriceList"        , indexPageProductpriceList      ); 	
+            
+            
+            
+                             //IndexDao.init();
+			indexPagesList = IndexDao.indexPages(keyword,page);
+		    
+            session.setAttribute( "indexPagesList"                   , indexPagesList                 ); 
+            
+            session.setAttribute( "page"                             ,      page                      ); 
+            
+            
+            
+		    System.out.println(   "product   count                 -- "  + indexPageproductidList.size()  );
+            System.out.println(   "indexPage Storing session finish..."  + "\n"                           );
+            
+		       mav.setViewName("indexCenter/indexPage");
+		return mav;
+		
+	}
+	
+	
+	
+	public static void main(String[] args) {
+		
+		
+		String keyword = new String("汽车%20汽车城");
+		String[] keywords =keyword.split("%20");
+		for( int i = 0 ; i < keywords.length ; i++ ) {
+			System.out.println( "" + keywords[i] );
+		}
+		
+		String keyword2 = "汽车%20%20汽车城";
+		String[] keywords2 =keyword2.split("%20");
+		
+		for( int i = 0 ; i < keywords2.length ; i++ ) {
+			System.out.println( "" + keywords2[i] );
+		}
+		
+	}
+	
+	
+	public static void test1() {
+
+		String   keyword  = new String("汽车     汽车城 全车垫        沙发    真皮    气垫     自动驾驶 福特 加长 超舒适 S500 四驱 加厚刹车");
+		
+		String[] keywords = keyword.split(" ");
+		
+		System.out.println( " Split into -- " + keywords.length );
+		
+		for( int i = 0 ; i < keywords.length ; i++ ) {
+			
+			System.out.print( "--" + keywords[i] + "--");
+			
+			if(keywords[i].equals(""))
+				System.out.print( " Empty word...");
+			System.out.println();
+			
+		}
+		
+		
+		
+	      String sampleString = "Cat,Dog,Elephant";
+	      String[] items = sampleString.split(",");
+	      List<String> itemList = Arrays.asList(items);
+	      System.out.println(itemList);
+	      
+		
+		System.out.println( "" +  keyword.indexOf(" ") );
+		
+	}
+	
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

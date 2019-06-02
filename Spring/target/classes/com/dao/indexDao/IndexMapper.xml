@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.dao.indexDao.IndexMapper">
+	
+	<resultMap   id       = "firstboximgMap"     type="com.bean.FirstBoxImg">
+	     <id     property = "productid"      jdbcType="BINARY"  column = "productid"   />
+	     <result property = "firstboximg"    jdbcType="VARCHAR" column = "firstboximg" />
+	     <result property = "productname"    jdbcType="VARCHAR" column = "productname" />
+	     <result property = "price"          jdbcType="VARCHAR" column = "price"       />
+	     <result property = "value"          jdbcType="INTEGER" column = "value"       />
+	</resultMap>
+	
+	<select
+			  id           ="index"
+			  parameterType="java.util.Map"
+			  resultMap    ="firstboximgMap"
+			  flushCache   ="false"
+			  useCache     ="true"
+			  timeout      ="10000"
+			  fetchSize    ="256"
+			  statementType="PREPARED"
+			  resultSetType="FORWARD_ONLY">
+	     SELECT  productid , firstboximg , productname , price , value  FROM product 
+	     <where>
+			<foreach collection="keylist"   item="key"   index="index" open=" " separator=" AND "  close=" ">
+		                             productname LIKE #{key} 
+			</foreach>
+			<!-- bind function. -->
+			AND
+			<foreach collection="keynolist" item="nokey" index="index" open=" " separator=" AND "  close=" ">
+		                             productname NOT LIKE #{nokey} 
+			</foreach>
+		</where> 
+				ORDER BY #{order} #{sc} LIMIT #{limit} OFFSET #{offset}; 
+	</select>
+	
+	<select
+		  id           ="indexpages"
+		  parameterType="java.util.Map"
+		  resultType   ="int"
+		  flushCache   ="false"
+		  useCache     ="true"
+		  timeout      ="10000"
+		  fetchSize    ="256"
+		  statementType="PREPARED"
+		  resultSetType="FORWARD_ONLY">
+		   
+     	<foreach collection="pageoffList" item="pageoff" index="index" open=" " separator=" UNION ALL "  close=" ; ">
+     	 
+   		  SELECT COUNT(productname) AS page FROM ( SELECT productname FROM product 
+   		  
+	     <where>
+			<foreach collection="keylist" item="key" index="index" open=" " separator=" AND "  close=" ">
+		                             productname     LIKE #{key} 
+			</foreach>
+			<!-- bind function. -->
+			AND
+			<foreach collection="keynolist" item="nokey" index="index" open=" " separator=" AND "  close=" ">
+		                             productname NOT LIKE #{nokey} 
+			</foreach>
+		 </where> 
+		 
+		  ORDER BY #{order} #{sc} LIMIT #{limit} OFFSET #{pageoff} ) AS t1   
+		  
+		</foreach>
+			 
+	</select>
+ 	
+</mapper>
+

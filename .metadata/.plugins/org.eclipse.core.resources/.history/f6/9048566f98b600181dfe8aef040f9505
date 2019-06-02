@@ -1,0 +1,629 @@
+package com.userCenter.productCenter;
+
+import java.awt.Graphics2D;
+import java.awt.Image;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;
+
+import javax.imageio.ImageIO;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+
+import org.springframework.stereotype.Controller;
+import org.springframework.util.FileCopyUtils;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
+import org.springframework.web.servlet.ModelAndView;
+
+import com.bean.BoxImg;
+import com.bean.FirstBoxImg;
+import com.bean.Product;
+import com.bean.ProductDetail;
+import com.buffer.imgbuffer.BoxImgBuffer;
+import com.buffer.imgbuffer.BoxImgBuffer.LONGEREDGE;
+import com.dao.imgDao.BoxImgDao;
+import com.dao.productDao.FirstBoxImgDao;
+import com.dao.productDao.ProductDao;
+import com.dao.productDetailDao.ProductDetailDao;
+import com.dao.uuid.UuidUtils;
+import com.userCenter.productCenter.imgCenter.BoxImgCenter;
+
+
+// practice...
+class ProductPageThreadA implements Runnable {
+
+	public void run() {
+		
+	}
+	
+}
+
+@Controller
+public class ProductPage {
+	
+	String basePath  = null; 
+	
+	public static BufferedImage resize(BufferedImage img, int newW, int newH) { 
+		Image         tmp  = img.getScaledInstance(newW, newH, Image.SCALE_SMOOTH);
+		
+	    //BufferedImage dimg = new BufferedImage(newW, newH, BufferedImage.TYPE_USHORT_565_RGB);
+	    BufferedImage dimg = new BufferedImage(newW, newH, BufferedImage.TYPE_INT_RGB);
+	    Graphics2D    g2d  = dimg.createGraphics();
+	    
+	    g2d.drawImage(tmp, 0, 0, null);
+	    g2d.dispose();
+	    
+	    return dimg;
+	}
+	
+	
+	public static BufferedImage resizeBoxImg220( BufferedImage urlimg ) {
+		
+		BufferedImage newimg       = null;
+		
+		// 3.need to be resize.
+		if( (urlimg.getHeight()>220)||(urlimg.getWidth()>220) ) {
+			
+			/**resize small block**/
+			if( urlimg.getHeight() < urlimg.getWidth() ) {
+				double  multi     = (double)  urlimg.getWidth ()/ 220;
+				int     newHeight = (int   ) (urlimg.getHeight()/multi);
+				
+				System.out.println( "Width    longer : " + Double.toString(multi) );
+				System.out.println( "handling width  : " + 220       );
+				System.out.println( "handling height : " + newHeight );
+				
+				newimg  = resize( urlimg , 220      , newHeight );
+				
+			} else /*if ( urlImage.getHeight() > urlImage.getWidth() )*/ {
+				double  multi     = (double)  urlimg.getHeight()/ 220  ;
+				int     newWidth  = (int   ) (urlimg.getWidth ()/multi);
+				
+				System.out.println( "Height   longer : " + Double.toString(multi) );
+				System.out.println( "handling width  : " + newWidth  );
+				System.out.println( "handling height : " + 220        );
+				
+				newimg  = resize(  urlimg , newWidth     , 220        );
+			}
+			
+		} else {
+			return urlimg;
+		}
+		return newimg;
+		
+	}
+	
+	
+	@RequestMapping(value={"/productPage"},method=RequestMethod.GET)
+	public  ModelAndView     productPage ( HttpSession        session ,
+										   HttpServletRequest request ,
+										   ModelAndView       model   ) 
+							throws         InterruptedException       , 
+							               IOException                {
+		
+		ProductPageThreadA ppt  = new ProductPageThreadA();
+		Thread             pptt = new Thread(ppt);
+		
+						   pptt.start();
+		
+		Thread.sleep(300);
+		
+		basePath = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+request.getContextPath();
+		
+		String     productid   = (String)session.getAttribute("productid");
+		
+		System.out.println( "------------------------ converting ProductID ------------------------ " );
+		System.out.println( "productid -- " + productid + "\n" );
+		
+		
+		/**************** Basic infor ****************/
+		// 0.productid
+	    UUID       uuid        =  UUID.fromString(productid);
+	    byte[]     uuidbytes   =  UuidUtils.asBytes(uuid);
+		
+	    
+                                  ProductDao.init();
+        Product    product     =  ProductDao.queryProductByID(uuidbytes);
+        
+        
+ 	    // 1.name
+        session.setAttribute( "productName"          , product.getProductname() );
+        System.out.println  ( "Productname     -- "  + product.getProductname() );
+        
+ 	    // 2.price
+        session.setAttribute( "productPrice"         , product.getPrice      () );
+ 	    System.out.println  ( "Price           -- "  + product.getPrice      () );
+ 	    
+ 	    // 3.seller
+        session.setAttribute( "seller"               , product.getUsername   () );
+ 	    System.out.println  ( "seller          -- "  + product.getUsername   () );
+ 	    
+ 	                      				 BoxImgDao.init();
+		List<BoxImg>  	  boximgList  =  BoxImgDao.queryAllBoximgByID(uuid.toString());
+		System.out.println(   "boximgList.size -- " + boximgList.size() );
+		
+		Iterator      	  listiter    =  boximgList.iterator();
+		while(        	  listiter.hasNext() ) {
+			
+			BoxImg        boximg      = (BoxImg)listiter.next();
+			String        boximgPath  =  boximg.getBoximg();
+			
+			switch(Integer.valueOf(boximg.getCode())) {
+				case 0 : session.setAttribute("boxImg0", boximgPath );
+						 break;
+				case 1 : session.setAttribute("boxImg1", boximgPath );
+				 	     break;
+				case 2 : session.setAttribute("boxImg2", boximgPath );
+				 		 break;
+				case 3 : session.setAttribute("boxImg3", boximgPath );
+		 	     		 break;
+				case 4 : session.setAttribute("boxImg4", boximgPath );
+						 break;
+				case 5 : session.setAttribute("boxImg5", boximgPath );
+						 break;
+				default: ;
+						 break;
+			}
+			
+		}
+		
+		
+		/******************** Recommand boximg part. ********************/
+						   					                FirstBoxImgDao.init();
+		//UUID                        uuidt                =  UUID.fromString(productid);
+		List<FirstBoxImg>           firstboximgList      =  FirstBoxImgDao.queryRecommand7ProductsByID(  uuidbytes/*UuidUtils.asBytes(uuidt)*/  );		
+		Iterator                    firstboximgListiter  =  firstboximgList.iterator();
+		System.out.println( "1.FirstBoxImg List size -- " + firstboximgList.size() );
+		
+		Map<FirstBoxImg,LONGEREDGE> recommandBoxImgMap   =  new  HashMap<FirstBoxImg,LONGEREDGE>();
+		
+		System.out.println( "2.list default img path." );
+		String                      defaultimg           =  new  String("/img/default/userCenter/productCenter/280_280.jpg");
+		
+		for ( int i = 0 ; firstboximgListiter.hasNext() ; i++ ) {
+			
+			FirstBoxImg   firstboximg = (FirstBoxImg)firstboximgListiter.next();
+			
+			String        rootPath    =  new String("c:/tomcat/webapps/Spring/WEB-INF");
+			
+			File                    imgfile              =  new  File(rootPath+firstboximg.getFirstboximg());
+			
+			System.out.println( "3.test img file exists or not -- " );
+			System.out.println( "number " + i + "  img " + " -- " + basePath + firstboximg.getFirstboximg() );
+			
+			
+			if( imgfile.exists() ) {
+				System.out.println( "number " + i + " img exists. " );
+				System.out.println( "number " + i + " img longer edge -- " + BoxImgCenter.getLongEdge160( basePath , firstboximg.getFirstboximg() ).name() );
+				
+				// set longer edge.
+				switch ( BoxImgCenter.getLongEdge160( basePath , firstboximg.getFirstboximg() ) ) {
+					
+					case HEIGHT : recommandBoxImgMap.put(firstboximg, LONGEREDGE.HEIGHT );
+					case NONE   : recommandBoxImgMap.put(firstboximg, LONGEREDGE.NONE   );
+					default     : recommandBoxImgMap.put(firstboximg, LONGEREDGE.WIDTH  );
+					
+				}
+				
+			} else {
+				System.out.println( "number " + i + "  img not exists." );
+				firstboximg.setPhotoaddr(defaultimg);
+				recommandBoxImgMap.put( firstboximg , LONGEREDGE.HEIGHT );
+			}
+			
+		}
+				session.setAttribute( "recommandBoxImgMap" , recommandBoxImgMap );
+		/****************************************************/				
+		
+		
+		
+		
+		
+		
+		/******************** style part ********************/		
+		
+				// 1.DB INFOR.
+																	  ProductDetailDao.init();
+				ProductDetail       productdetail             =  new  ProductDetail();
+								    productdetail.setProductid(uuidbytes);
+				List<ProductDetail> pdetailList               =       ProductDetailDao.selectid(productdetail);
+				
+				
+				
+				// 2.set collection.
+				List<String>          styleimgList            =  new  ArrayList();
+				List<String>          styleimgsmallList       =  new  ArrayList();
+				List<String>          styleImgLongerEdgeList  =  new  ArrayList();
+				
+				List<String>          styleimgnameList        =  new  ArrayList();
+				
+				
+				
+				String                rootPath                =   new String("c:/tomcat/webapps/Spring/WEB-INF");
+				
+				
+				
+				Iterator            pdetailiter               =  pdetailList.iterator();
+				
+				
+				
+				while(pdetailiter.hasNext()) {
+					
+					ProductDetail            pdetail          =  (ProductDetail)pdetailiter.next();
+					
+					String            img                     =                 pdetail.getBoximg();
+					String            imgsmall                =                 pdetail.getBoximg();
+					
+									styleimgnameList.add(    pdetail.getName       () );
+					
+					
+					if(  (imgsmall!=null)&&(new File(rootPath+imgsmall).exists())  ) 
+						styleimgsmallList.add(   pdetail.getBoximgsmall() ); 
+					else {
+						styleImgLongerEdgeList.add("HEIGHT" );
+						styleimgsmallList.add(   null   ); 
+					}
+					
+					
+					// 2.2.restore boximg part.
+					if(  (img!=null)&&(new File(rootPath+img).exists())  ) {
+							
+							System.out.println( "firstboximg has been recorded to List. " );
+							styleimgList.add(	     pdetail.getBoximg()	   );
+							
+						// 1.identify longer edge.
+						if( ProductPage.getLongEdge(basePath, img).equals(LONGEREDGE.HEIGHT) )
+							styleImgLongerEdgeList.add("HEIGHT");
+						else 
+							styleImgLongerEdgeList.add("WIDTH" );
+							
+					} else {
+							
+							System.out.println( "firstboximg file not exists... " );
+							// set default img Path.
+							styleimgList.add(null);
+							
+							styleImgLongerEdgeList.add("HEIGHT" );
+							
+					}
+					
+				}
+				
+				
+							session.setAttribute( "styleimgList"            , styleimgList           ); 
+							
+						    session.setAttribute( "styleimgsmallList"       , styleimgsmallList      );
+						    session.setAttribute( "styleImgLongerEdgeList"  , styleImgLongerEdgeList ); 
+						    
+				            session.setAttribute( "styleimgnameList"        , styleimgnameList       ); 		
+							
+				
+			    model = new ModelAndView("/userCenter/productCenter/productPage");
+		return  model;
+		
+	}
+	
+	
+	public static LONGEREDGE   getLongEdge( String basePath , String boximgaddr ) throws IOException {
+		
+		URL           urlInput = new URL(basePath+boximgaddr);
+		BufferedImage urlImage = ImageIO.read(urlInput.openStream());
+		
+		if ( urlImage.getHeight() > urlImage.getWidth() ) {
+			return LONGEREDGE.HEIGHT;
+		} else {
+			return LONGEREDGE.WIDTH ;
+		}
+	}
+	
+	
+	@RequestMapping(        value  = "/boxImgURL0/{value}" ,  method = RequestMethod.GET         )
+	public                  void       boxImgPath0         (  HttpServletResponse    response    , /*, @PathVariable String value*/
+								                              HttpSession            session     )   
+								                              throws                 IOException {
+		URL                 imgurl =   new URL( basePath   +  session.getAttribute( "boxImg0" )  );
+		System.out.println(                   "boxImg0 -- "+  session.getAttribute( "boxImg0" )  );
+        FileCopyUtils.copy( imgurl.openStream()            ,  response.getOutputStream()         );
+	}
+	
+	@RequestMapping(        value  = "/boxImgURL1/{value}" ,  method = RequestMethod.GET         )
+	public                  void       boxImgPath1         (  HttpServletResponse    response    , /*, @PathVariable String value*/
+								                              HttpSession            session     )   
+								                              throws                 IOException {
+		URL                 imgurl =   new URL( basePath   +  session.getAttribute( "boxImg1" )  );
+		System.out.println(                   "boxImg1 -- "+  session.getAttribute( "boxImg1" )  );
+        FileCopyUtils.copy( imgurl.openStream()            ,  response.getOutputStream()         );
+	}
+	
+	@RequestMapping(        value  = "/boxImgURL2/{value}" ,  method = RequestMethod.GET         )
+	public                  void       boxImgPath2         (  HttpServletResponse    response    , /*, @PathVariable String value*/
+								                              HttpSession            session     )   
+								                              throws                 IOException {
+		URL                 imgurl =   new URL( basePath   +  session.getAttribute( "boxImg2" )  );
+		System.out.println(                   "boxImg2 -- "+  session.getAttribute( "boxImg2" )  );
+        FileCopyUtils.copy( imgurl.openStream()            ,  response.getOutputStream()         );
+	}
+	
+	@RequestMapping(        value  = "/boxImgURL3/{value}" ,  method = RequestMethod.GET         )
+	public                  void       boxImgPath3         (  HttpServletResponse    response    , /*, @PathVariable String value*/
+								                              HttpSession            session     )   
+								                              throws                 IOException {
+		URL                 imgurl =   new URL( basePath   +  session.getAttribute( "boxImg3" )  );
+		System.out.println(                   "boxImg3 -- "+  session.getAttribute( "boxImg3" )  );
+        FileCopyUtils.copy( imgurl.openStream()            ,  response.getOutputStream()         );
+	}
+	
+	@RequestMapping(        value  = "/boxImgURL4/{value}" ,  method = RequestMethod.GET         )
+	public                  void       boxImgPath4         (  HttpServletResponse    response    , /*, @PathVariable String value*/
+								                              HttpSession            session     )   
+								                              throws                 IOException {
+		URL                 imgurl =   new URL( basePath   +  session.getAttribute( "boxImg4" )  );
+		System.out.println(                   "boxImg4 -- "+  session.getAttribute( "boxImg4" )  );
+        FileCopyUtils.copy( imgurl.openStream()            ,  response.getOutputStream()         );
+	}
+	
+	@RequestMapping(        value  = "/boxImgURL5/{value}" ,  method = RequestMethod.GET         )
+	public                  void       boxImgPath5         (  HttpServletResponse    response    , /*, @PathVariable String value*/
+								                              HttpSession            session     )   
+								                              throws                 IOException {
+		URL                 imgurl =   new URL( basePath   +  session.getAttribute( "boxImg5" )  );
+		System.out.println(                   "boxImg5 -- "+  session.getAttribute( "boxImg5" )  );
+        FileCopyUtils.copy( imgurl.openStream()            ,  response.getOutputStream() );
+	}
+	
+	
+	
+	       @RequestMapping(value = "/boxImgsmall0",method=RequestMethod.GET         )
+	public @ResponseBody   String    boxImgsmall0 (HttpSession          session     ) 
+										           throws               IOException {
+		if( session.getAttribute (  "boxImg0"  )== null  )              return    "";
+		
+		long              value  = java.util.Calendar.getInstance().getTimeInMillis();
+		
+		switch ( BoxImgCenter.getLongEdge75( basePath , (String)session.getAttribute( "boxImg0" ) ) ) {
+		
+			case HEIGHT : return "<img id='boxImgsmall0' height='75' src='"+basePath+"/boxImgURL0/"+value+"'/>";
+			case WIDTH  : return "<img id='boxImgsmall0' width ='75' src='"+basePath+"/boxImgURL0/"+value+"'/>";
+			default     : return "<img id='boxImgsmall0'             src='"+basePath+"/boxImgURL0/"+value+"'/>";
+		}
+	}
+	
+	       @RequestMapping(value = "/boxImgsmall1",method=RequestMethod.GET         )
+	public @ResponseBody   String    boxImgsmall1 (HttpSession          session     ) 
+										           throws               IOException {
+		if( session.getAttribute (  "boxImg1"  )== null  )              return    "";
+		
+		long              value  = java.util.Calendar.getInstance().getTimeInMillis();
+		
+		switch ( BoxImgCenter.getLongEdge75( basePath , (String)session.getAttribute( "boxImg1" ) ) ) {
+		
+			case HEIGHT : return "<img id='boxImgsmall1' height='75' src='"+basePath+"/boxImgURL1/"+value+"'/>";
+			case WIDTH  : return "<img id='boxImgsmall1' width ='75' src='"+basePath+"/boxImgURL1/"+value+"'/>";
+			default     : return "<img id='boxImgsmall1'             src='"+basePath+"/boxImgURL1/"+value+"'/>";
+		}
+	}
+	
+	
+	       @RequestMapping(value = "/boxImgsmall2",method=RequestMethod.GET         )
+	public @ResponseBody   String    boxImgsmall2 (HttpSession          session     ) 
+										           throws               IOException {
+		if( session.getAttribute (  "boxImg2"  )== null  )              return    "";
+		
+		long              value  = java.util.Calendar.getInstance().getTimeInMillis();
+		
+		switch ( BoxImgCenter.getLongEdge75( basePath , (String)session.getAttribute( "boxImg2" ) ) ) {
+		
+			case HEIGHT : return "<img id='boxImgsmall2' height='75' src='"+basePath+"/boxImgURL2/"+value+"'/>";
+			case WIDTH  : return "<img id='boxImgsmall2' width ='75' src='"+basePath+"/boxImgURL2/"+value+"'/>";
+			default     : return "<img id='boxImgsmall2'             src='"+basePath+"/boxImgURL2/"+value+"'/>";
+		}
+	}
+	
+	       @RequestMapping(value = "/boxImgsmall3",method=RequestMethod.GET         )
+	public @ResponseBody   String    boxImgsmall3 (HttpSession          session     ) 
+										           throws               IOException {
+		if( session.getAttribute (  "boxImg3"  )== null  )              return    "";
+		
+		long              value  = java.util.Calendar.getInstance().getTimeInMillis();
+		
+		switch ( BoxImgCenter.getLongEdge75( basePath , (String)session.getAttribute( "boxImg3" ) ) ) {
+		
+			case HEIGHT : return "<img id='boxImgsmall3' height='75' src='"+basePath+"/boxImgURL3/"+value+"'/>";
+			case WIDTH  : return "<img id='boxImgsmall3' width ='75' src='"+basePath+"/boxImgURL3/"+value+"'/>";
+			default     : return "<img id='boxImgsmall3'             src='"+basePath+"/boxImgURL3/"+value+"'/>";
+		}
+	}
+	
+	
+	       @RequestMapping(value = "/boxImgsmall4",method=RequestMethod.GET         )
+	public @ResponseBody   String    boxImgsmall4 (HttpSession          session     ) 
+										           throws               IOException {
+		if( session.getAttribute (  "boxImg4"  )== null  )              return    "";
+		
+		long              value  = java.util.Calendar.getInstance().getTimeInMillis();
+		
+		switch ( BoxImgCenter.getLongEdge75( basePath , (String)session.getAttribute( "boxImg4" ) ) ) {
+		
+			case HEIGHT : return "<img id='boxImgsmall4' height='75' src='"+basePath+"/boxImgURL4/"+value+"'/>";
+			case WIDTH  : return "<img id='boxImgsmall4' width ='75' src='"+basePath+"/boxImgURL4/"+value+"'/>";
+			default     : return "<img id='boxImgsmall4'             src='"+basePath+"/boxImgURL4/"+value+"'/>";
+		}
+	}
+	
+	       
+	       @RequestMapping(value = "/boxImgsmall5",method=RequestMethod.GET         )
+	public @ResponseBody   String    boxImgsmall5 (HttpSession          session     ) 
+										           throws               IOException {
+		if( session.getAttribute (  "boxImg5"  )== null  )              return    "";
+		
+		long              value  = java.util.Calendar.getInstance().getTimeInMillis();
+		
+		switch ( BoxImgCenter.getLongEdge75( basePath , (String)session.getAttribute( "boxImg5" ) ) ) {
+		
+			case HEIGHT : return "<img id='boxImgsmall5' height='75' src='"+basePath+"/boxImgURL5/"+value+"'/>";
+			case WIDTH  : return "<img id='boxImgsmall5' width ='75' src='"+basePath+"/boxImgURL5/"+value+"'/>";
+			default     : return "<img id='boxImgsmall5'             src='"+basePath+"/boxImgURL5/"+value+"'/>";
+		}
+	}
+	
+	       
+	       @RequestMapping(value = "/boxImg0",method=RequestMethod.GET         )
+	public @ResponseBody   String    boxImg0 (HttpSession          session     ) 
+										           throws               IOException {
+		if( session.getAttribute (  "boxImg0"  )== null  )              return    "";
+		
+		long              value  = java.util.Calendar.getInstance().getTimeInMillis();
+		
+		switch ( BoxImgCenter.getLongEdge510( basePath , (String)session.getAttribute( "boxImg0" ) ) ) {
+		
+			case HEIGHT : return "<img id='boxImg0' height='510' src='"+basePath+"/boxImgURL0/"+value+"'/>";
+			case WIDTH  : return "<img id='boxImg0' width ='510' src='"+basePath+"/boxImgURL0/"+value+"'/>";
+			default     : return "<img id='boxImg0'              src='"+basePath+"/boxImgURL0/"+value+"'/>";
+		}
+	}
+	       
+	       @RequestMapping(value = "/boxImg1",method=RequestMethod.GET         )
+	public @ResponseBody   String    boxImg1 (HttpSession          session     ) 
+										           throws               IOException {
+		if( session.getAttribute (  "boxImg1"  )== null  )              return    "";
+		
+		long              value  = java.util.Calendar.getInstance().getTimeInMillis();
+		
+		switch ( BoxImgCenter.getLongEdge510( basePath , (String)session.getAttribute( "boxImg1" ) ) ) {
+		
+			case HEIGHT : return "<img id='boxImg1' height='510' src='"+basePath+"/boxImgURL1/"+value+"'/>";
+			case WIDTH  : return "<img id='boxImg1' width ='510' src='"+basePath+"/boxImgURL1/"+value+"'/>";
+			default     : return "<img id='boxImg1'              src='"+basePath+"/boxImgURL1/"+value+"'/>";
+		}
+	}
+	       
+	       @RequestMapping(value = "/boxImg2",method=RequestMethod.GET         )
+	public @ResponseBody   String    boxImg2 (HttpSession          session     ) 
+										           throws               IOException {
+		if( session.getAttribute (  "boxImg2"  )== null  )              return    "";
+		
+		long              value  = java.util.Calendar.getInstance().getTimeInMillis();
+		
+		switch ( BoxImgCenter.getLongEdge510( basePath , (String)session.getAttribute( "boxImg2" ) ) ) {
+		
+			case HEIGHT : return "<img id='boxImg2' height='510' src='"+basePath+"/boxImgURL2/"+value+"'/>";
+			case WIDTH  : return "<img id='boxImg2' width ='510' src='"+basePath+"/boxImgURL2/"+value+"'/>";
+			default     : return "<img id='boxImg2'              src='"+basePath+"/boxImgURL2/"+value+"'/>";
+		}
+	}
+	       
+	       @RequestMapping(value = "/boxImg3",method=RequestMethod.GET         )
+	public @ResponseBody   String    boxImg3 (HttpSession          session     ) 
+										           throws               IOException {
+		if( session.getAttribute (  "boxImg3"  )== null  )              return    "";
+		
+		long              value  = java.util.Calendar.getInstance().getTimeInMillis();
+		
+		switch ( BoxImgCenter.getLongEdge510( basePath , (String)session.getAttribute( "boxImg3" ) ) ) {
+		
+			case HEIGHT : return "<img id='boxImg3' height='510' src='"+basePath+"/boxImgURL3/"+value+"'/>";
+			case WIDTH  : return "<img id='boxImg3' width ='510' src='"+basePath+"/boxImgURL3/"+value+"'/>";
+			default     : return "<img id='boxImg3'              src='"+basePath+"/boxImgURL3/"+value+"'/>";
+		}
+	}
+	
+	
+	       @RequestMapping(value = "/boxImg4",method=RequestMethod.GET         )
+	public @ResponseBody   String    boxImg4 (HttpSession          session     ) 
+										           throws               IOException {
+		if( session.getAttribute (  "boxImg4"  )== null  )              return    "";
+		
+		long              value  = java.util.Calendar.getInstance().getTimeInMillis();
+		
+		switch ( BoxImgCenter.getLongEdge510( basePath , (String)session.getAttribute( "boxImg4" ) ) ) {
+		
+			case HEIGHT : return "<img id='boxImg4' height='510' src='"+basePath+"/boxImgURL4/"+value+"'/>";
+			case WIDTH  : return "<img id='boxImg4' width ='510' src='"+basePath+"/boxImgURL4/"+value+"'/>";
+			default     : return "<img id='boxImg4'              src='"+basePath+"/boxImgURL4/"+value+"'/>";
+		}
+	}
+	
+	
+	       @RequestMapping(value = "/boxImg5",method=RequestMethod.GET         )
+	public @ResponseBody   String    boxImg5 (HttpSession          session     ) 
+										           throws               IOException {
+		if( session.getAttribute (  "boxImg5"  )== null  )              return    "";
+		
+		long              value  = java.util.Calendar.getInstance().getTimeInMillis();
+		
+		switch ( BoxImgCenter.getLongEdge510( basePath , (String)session.getAttribute( "boxImg5" ) ) ) {
+		
+			case HEIGHT : return "<img id='boxImg5' height='510' src='"+basePath+"/boxImgURL5/"+value+"'/>";
+			case WIDTH  : return "<img id='boxImg5' width ='510' src='"+basePath+"/boxImgURL5/"+value+"'/>";
+			default     : return "<img id='boxImg5'              src='"+basePath+"/boxImgURL5/"+value+"'/>";
+		}
+	}
+	
+	
+	@RequestMapping(value={"/userCenter/storeProductID"},method=RequestMethod.POST)
+	public @ResponseBody String storeProductID ( MultipartHttpServletRequest request , 
+			                                     HttpSession                 session ) throws InterruptedException {
+		String productid = request.getParameter("productid");
+		System.out.println( "------------------------ storing ProductID ------------------------ " );
+		System.out.println( "productid -- " + productid + "\n" );
+			   session.setAttribute("productid", productid );
+		return productid;
+	}
+	
+	
+	@RequestMapping(value={"/loadProductPage"},method=RequestMethod.POST)
+	public void loadProductPage ( MultipartHttpServletRequest request  ,
+								  HttpServletResponse         response ,
+								  HttpSession                 session  ,
+								  ModelAndView                model    ) throws IOException {
+		
+		//System.out.println( "productPage -- " + request.getParameter("basePath"   )+request.getParameter("productPage") );
+		
+		String  productid   = (String)session.getAttribute("productid");
+		
+		System.out.println( "------------------------ converting ProductID ------------------------ " );
+		System.out.println( "productid -- " + productid + "\n" );
+		
+		
+		// 0.get productid
+	    UUID    uuid        = UUID.fromString(productid);
+	    byte[]  uuidbytes   = UuidUtils.asBytes(uuid);
+	    
+	                          ProductDao.init();
+ 	    Product product     = ProductDao.queryProductByID(uuidbytes);
+ 	    
+		// 1.response prodcuct page.
+ 	    String  productPage = product.getProductpage();
+ 	    URL     url         = new URL( basePath + productPage );
+ 	    
+ 	    System.out.println ( "length of productPage -- " + url.openStream().available() );
+ 	    System.out.println ( "url addr   -- " + basePath + productPage + "\n" );
+ 	    
+ 	    String  tDir        = System.getProperty("java.io.tmpdir"); 
+ 	    String  path        = tDir + "tmp" + ".pdf"; 
+ 	    
+ 	    FileCopyUtils.copy( url.openStream() , response.getOutputStream() );
+ 	    
+	}
+	
+}
+
+
+
+
+
+
+
+
+
